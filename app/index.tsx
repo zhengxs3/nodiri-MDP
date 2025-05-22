@@ -22,8 +22,8 @@ export default function WelcomeScreen() {
       <Image source={require('@/assets/images/Plan de travail 10.png')} style={[styles.decor, { top: 0, left: -30, width: 120, height: 120 }]} />
       <Image source={require('@/assets/images/Plan de travail 7.png')} style={[styles.decor, { top: -30, right: 0, width: 180, height: 180 }]} />
       <Image source={require('@/assets/images/Plan de travail 11.png')} style={[styles.decor, { top: height * 0.17, left: width * 0.28, width: 100, height: 60 }]} />
-      <Image source={require('@/assets/images/Plan de travail 12.png')} style={[styles.decor, { top: height * 0.58, right: width * 0.12, width: 55, height: 55 }]} />
-      <Image source={require('@/assets/images/Plan de travail 13.png')} style={[styles.decor, { bottom: height * 0.28, left: width * 0.15, width: 90, height: 90 }]} />
+      <Image source={require('@/assets/images/Plan de travail 12.png')} style={[styles.decor, { top: height * 0.50, right: width * 0.08, width: 55, height: 55 }]} />
+      <Image source={require('@/assets/images/Plan de travail 13.png')} style={[styles.decor, { bottom: height * 0.20, left: width * 0.08, width: 90, height: 90 }]} />
       <Image source={require('@/assets/images/Plan de travail 14.png')} style={[styles.decor, { bottom: -30, right: 60, width: 140, height: 100 }]} />
 
       {/* 正文内容 */}
