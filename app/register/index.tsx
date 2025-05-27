@@ -4,6 +4,7 @@ import { useState } from 'react';
 import {
   Alert,
   Image,
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
@@ -31,7 +32,7 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!name || !role || !age || !email || !password || !confirmPassword) {
       showAlert('Champs obligatoires', 'Veuillez remplir tous les champs obligatoires.');
       return;
@@ -41,100 +42,128 @@ export default function RegisterScreen() {
       return;
     }
 
-    console.log({ name, role, age, email, password });
-    showAlert('Succès', 'Inscription réussie !');
-    router.replace('/');
+    try {
+      const response = await fetch('http://192.168.1.144:8000/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, role, age, email, password }),
+      });
+
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        showAlert('Succès', 'Inscription réussie !');
+        router.replace('/register/paiment');
+      } else {
+        showAlert('Erreur', data.error || 'Échec de l’enregistrement.');
+      }
+    } catch (error) {
+      console.error('Erreur réseau:', error);
+      showAlert('Erreur réseau', 'Impossible de contacter le serveur.');
+    }
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scroll}>
-      <View style={styles.container}>
-        <Image source={require('@/assets/images/Group 18c.png')} style={styles.logo} />
-        <Text style={styles.title}>Inscription</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.container}>
+          <Image source={require('@/assets/images/logo.png')} style={styles.logo} />
+          <Text style={styles.title}>Inscription</Text>
 
-        {/* Nom */}
-        <View style={styles.field}>
-          <Text style={styles.label}>Nom complet *</Text>
-          <TextInput style={styles.input} value={name} onChangeText={setName} />
-        </View>
+          {/* Nom */}
+          <View style={styles.field}>
+            <Text style={styles.label}>Nom complet *</Text>
+            <TextInput style={styles.input} value={name} onChangeText={setName} />
+          </View>
 
-        {/* Role */}
-        <SimpleSelect
-          label="Vous êtes"
-          required
-          selected={role}
-          onSelect={setRole}
-          options={[
-            { label: 'Sélectionner -', value: '' },
-            { label: 'Adolescent', value: 'adolescent' },
-            { label: 'Parent', value: 'parent' },
-            { label: 'Professionnel de santé', value: 'sante' },
-            { label: "Professionnel de l'éducation", value: 'education' },
-          ]}
-        />
-
-        {/* Âge */}
-        <SimpleSelect
-          label="Âge (de l’enfant)"
-          required
-          selected={age}
-          onSelect={setAge}
-          options={[
-            { label: 'Sélectionner -', value: '' },
-            { label: '3–5 ans', value: '3-5' },
-            { label: '6–10 ans', value: '6-10' },
-            { label: '11–14 ans', value: '11-14' },
-            { label: '15+', value: '15+' },
-          ]}
-        />
-
-        {/* Email */}
-        <View style={styles.field}>
-          <Text style={styles.label}>Email *</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
+          {/* Role */}
+          <SimpleSelect
+            label="Vous êtes"
+            required
+            selected={role}
+            onSelect={setRole}
+            options={[
+              { label: 'Sélectionner -', value: '' },
+              { label: 'Adolescent', value: 'adolescent' },
+              { label: 'Parent', value: 'parent' },
+              { label: 'Professionnel de santé', value: 'sante' },
+              { label: "Professionnel de l'éducation", value: 'education' },
+            ]}
           />
-        </View>
 
-        {/* Password */}
-        <View style={styles.field}>
-          <Text style={styles.label}>Mot de passe *</Text>
-          <TextInput
-            style={styles.input}
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
+          {/* Âge */}
+          <SimpleSelect
+            label="Âge (de l’enfant)"
+            required
+            selected={age}
+            onSelect={setAge}
+            options={[
+              { label: 'Sélectionner -', value: '' },
+              { label: '3–5 ans', value: '3-5' },
+              { label: '6–10 ans', value: '6-10' },
+              { label: '11–14 ans', value: '11-14' },
+              { label: '15+', value: '15+' },
+              { label: 'Professionnel', value: 'pro' },
+            ]}
           />
+
+          {/* Email */}
+          <View style={styles.field}>
+            <Text style={styles.label}>Email *</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={email}
+              onChangeText={setEmail}
+            />
+          </View>
+
+          {/* Password */}
+          <View style={styles.field}>
+            <Text style={styles.label}>Mot de passe *</Text>
+            <TextInput
+              style={styles.input}
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
+
+          {/* Confirm Password */}
+          <View style={styles.field}>
+            <Text style={styles.label}>Validation du mot de passe *</Text>
+            <TextInput
+              style={styles.input}
+              secureTextEntry
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+            />
+          </View>
+
+          <Text style={styles.note}>
+            L’application est disponible pour un tarif unique de 9.99€
+          </Text>
+
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <Text style={styles.buttonText}>S’inscrire et payer</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => router.back()}>
+            <Text style={styles.back}>Retour au menu</Text>
+          </TouchableOpacity>
         </View>
-
-        {/* Confirm Password */}
-        <View style={styles.field}>
-          <Text style={styles.label}>Validation du mot de passe *</Text>
-          <TextInput
-            style={styles.input}
-            secureTextEntry
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-          />
-        </View>
-
-        <Text style={styles.note}>
-          L’application est disponible pour un tarif unique de 9.99€
-        </Text>
-
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>S’inscrire et payer</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.back}>Retour au menu</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -143,11 +172,14 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     paddingVertical: 40,
+    backgroundColor: '#fff',
   },
   container: {
     padding: 10,
+    width: '90%',
+    maxWidth: 400,
+    alignSelf: 'center',
     alignItems: 'center',
-    ...(Platform.OS === 'web' ? { alignSelf: 'center' } : {}),
   },
   logo: {
     width: 150,
