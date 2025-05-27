@@ -26,35 +26,16 @@ export default function RegisterScreen() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async () => {
-  if (!name || !password) {
-    showAlert('Champs obligatoires', 'Veuillez remplir tous les champs obligatoires.');
-    return;
-  }
-
-  try {
-    const response = await fetch('http://192.168.1.144:8000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, password }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      showAlert('Succès', 'Connexion réussie !');
-      router.replace('/login/accueil');
-    } else {
-      showAlert('Erreur', data.message || 'Échec de connexion');
+  const handleSubmit = () => {
+    if (!name || !password) {
+      showAlert('Champs obligatoires', 'Veuillez remplir tous les champs obligatoires.');
+      return;
     }
-  } catch (error) {
-    console.error(error);
-    showAlert('Erreur', 'Erreur réseau');
-  }
-};
 
+    console.log({ name, password });
+    showAlert('Succès', 'Connexion réussie !');
+    router.replace('/login/accueil');
+  };
 
   return (
     <KeyboardAvoidingView
