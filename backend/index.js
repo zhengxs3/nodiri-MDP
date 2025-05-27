@@ -16,6 +16,8 @@ const userProgressRoutes = require("./routes/userLearningProgress.routes");
 const permissionsRoutes = require("./routes/permissions.routes");
 const userPermissionsRoutes = require("./routes/userPermission.routes");
 const modulePermissionsRoutes = require("./routes/modulePermission.routes");
+const authRoutes = require("./routes/auth.routes");
+const meRoutes = require("./routes/me.routes");
 
 
 
@@ -25,6 +27,14 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Routes auth
+app.use("/api/auth", authRoutes);
+
+// Routes /me (route protégée)
+app.use("/api/me", meRoutes);
+
+
 // Routes Users
 app.use("/api/users", userRoutes);
 // Routes Messages
