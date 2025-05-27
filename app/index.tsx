@@ -1,7 +1,7 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import { useRouter } from 'expo-router';
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
+import { Poppins_400Regular, Poppins_600SemiBold, useFonts } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
+import { useRouter } from 'expo-router';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -19,16 +19,16 @@ export default function WelcomeScreen() {
   return (
     <View style={styles.container}>
       {/* 背景图形 */}
-      <Image source={require('@/assets/images/Plan de travail 10.png')} style={[styles.decor, { top: 0, left: -30, width: 120, height: 120 }]} />
-      <Image source={require('@/assets/images/Plan de travail 7.png')} style={[styles.decor, { top: -30, right: 0, width: 180, height: 180 }]} />
-      <Image source={require('@/assets/images/Plan de travail 11.png')} style={[styles.decor, { top: height * 0.17, left: width * 0.28, width: 100, height: 60 }]} />
-      <Image source={require('@/assets/images/Plan de travail 12.png')} style={[styles.decor, { top: height * 0.50, right: width * 0.08, width: 55, height: 55 }]} />
-      <Image source={require('@/assets/images/Plan de travail 13.png')} style={[styles.decor, { bottom: height * 0.20, left: width * 0.08, width: 90, height: 90 }]} />
-      <Image source={require('@/assets/images/Plan de travail 14.png')} style={[styles.decor, { bottom: -30, right: 60, width: 140, height: 100 }]} />
+      <Image source={require('@/assets/images/entree01.png')} style={[styles.decor, { top: 0, left: -30, width: 120, height: 120 }]} />
+      <Image source={require('@/assets/images/entree02.png')} style={[styles.decor, { top: -30, right: 0, width: 180, height: 180 }]} />
+      <Image source={require('@/assets/images/entree03.png')} style={[styles.decor, { top: height * 0.17, left: width * 0.28, width: 100, height: 60 }]} />
+      <Image source={require('@/assets/images/entree04.png')} style={[styles.decor, { top: height * 0.50, right: width * 0.08, width: 55, height: 55 }]} />
+      <Image source={require('@/assets/images/entree05.png')} style={[styles.decor, { bottom: height * 0.20, left: width * 0.08, width: 90, height: 90 }]} />
+      <Image source={require('@/assets/images/entree06.png')} style={[styles.decor, { bottom: -30, right: 60, width: 140, height: 100 }]} />
 
       {/* 正文内容 */}
       <Text style={styles.title}>Bienvenue sur</Text>
-      <Image source={require('@/assets/images/Group 18.png')} style={styles.logo} />
+      <Image source={require('@/assets/images/entree00.png')} style={styles.logo} />
 
       <TouchableOpacity style={styles.primaryButton} onPress={() => router.push('/login')}>
         <Text style={styles.primaryButtonText}>Se connecter</Text>

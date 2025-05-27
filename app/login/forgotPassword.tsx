@@ -1,16 +1,16 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-    Alert,
-    Image,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 const showAlert = (title: string, message: string) => {
@@ -40,7 +40,7 @@ export default function ForgotPasswordScreen() {
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.container}>
-          <Image source={require('@/assets/images/Group 18c.png')} style={styles.logo} />
+          <Image source={require('@/assets/images/logo.png')} style={styles.logo} />
           <Text style={styles.title}>Mot de passe{'\n'}oublié ?</Text>
           <Text style={styles.description}>
             Renseignez votre adresse email afin de recevoir les instructions pour réinitialiser votre mot de passe
