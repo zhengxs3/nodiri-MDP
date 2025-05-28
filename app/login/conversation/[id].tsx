@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -11,27 +11,37 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ConversationDetail() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  const insets = useSafeAreaInsets(); // ✅ 获取安全区域 padding（特别是底部）
 
   const [inputValue, setInputValue] = useState('');
-
-  // ⚠️ 模拟消息，后期可接数据库
-  const messages = [
+  const [messages, setMessages] = useState([
     { sender: 'Utilisateur 1', text: 'Bonjour, ça va ?', me: false },
     { sender: 'Moi', text: 'Très bien, merci ! Et toi ?', me: true },
     { sender: 'Utilisateur 1', text: 'Super aussi !', me: false },
-  ];
+  ]);
+
+  const scrollRef = useRef<ScrollView>(null);
+
+  const handleSend = () => {
+    if (inputValue.trim() === '') return;
+    setMessages([...messages, { sender: 'Moi', text: inputValue, me: true }]);
+    setInputValue('');
+    setTimeout(() => {
+      scrollRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+  };
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={60}
+      style={[styles.container, { paddingBottom: insets.bottom }]} // ✅ 关键修复
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
     >
-      {/* 🔼 返回头部 */}
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Image
@@ -44,8 +54,11 @@ export default function ConversationDetail() {
         </View>
       </View>
 
-      {/* 🔽 对话内容 */}
-      <ScrollView contentContainerStyle={styles.messages}>
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={styles.messages}
+        keyboardShouldPersistTaps="always"
+      >
         {messages.map((msg, index) => (
           <View
             key={index}
@@ -57,9 +70,7 @@ export default function ConversationDetail() {
         ))}
       </ScrollView>
 
-      {/* ⌨️ 回复输入框 */}
       <View style={styles.replyBox}>
-        <Text style={styles.replyTitle}>Répondre</Text>
         <TextInput
           placeholder="Votre message"
           style={styles.input}
@@ -67,12 +78,7 @@ export default function ConversationDetail() {
           value={inputValue}
           onChangeText={setInputValue}
         />
-        <TouchableOpacity
-          onPress={() => {
-            console.log('Message envoyé :', inputValue);
-            setInputValue('');
-          }}
-        >
+        <TouchableOpacity onPress={handleSend}>
           <Text style={styles.sendArrow}>{'>'}</Text>
         </TouchableOpacity>
       </View>
@@ -81,12 +87,10 @@ export default function ConversationDetail() {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
+  container: {
+    flex: 1,
     backgroundColor: '#fff',
-    paddingBottom: 30,
   },
-
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -111,7 +115,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#2F7C8D',
   },
-
   messages: {
     padding: 16,
     paddingBottom: 100,
@@ -137,29 +140,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18,
   },
-
   replyBox: {
-    borderWidth: 1,
-    borderColor: '#000',
-    margin: 16,
-    borderRadius: 12,
-    padding: 10,
-    position: 'relative',
-  },
-  replyTitle: {
-    fontWeight: 'bold',
-    marginBottom: 6,
+    borderTopWidth: 1,
+    borderColor: '#ccc',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   input: {
-    minHeight: 60,
+    flex: 1,
+    minHeight: 40,
     fontSize: 14,
     color: '#000',
+    marginRight: 8,
   },
   sendArrow: {
-    position: 'absolute',
-    right: 12,
-    bottom: 12,
-    fontSize: 22,
+    fontSize: 26,
     color: '#E07A1F',
+    padding: 8,
   },
 });

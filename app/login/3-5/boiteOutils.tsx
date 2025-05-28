@@ -41,56 +41,144 @@ export default function HomeScreen() {
         <ScrollView contentContainerStyle={styles.scroll}>
           {/* Routine 卡片 */}
           <View style={styles.grid}>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Les émotions',
+                    imageKey: 'emotion',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img emotion.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Les émotions</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Les mots magiques',
+                    imageKey: 'motmagiques',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img mots magiques.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Les mots magiques</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'La météo',
+                    imageKey: 'meteo',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img meteo.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>La météo</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'La communication',
+                    imageKey: 'communication',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img communication.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>La communication</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Les émotions',
+                    imageKey: 'emotion',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img emotion.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Les émotions</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Les mots magiques',
+                    imageKey: 'motmagiques',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img mots magiques.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Les mots magiques</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'La météo',
+                    imageKey: 'meteo',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img meteo.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>La météo</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'La communication',
+                    imageKey: 'communication',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img communication.png')}
                 style={styles.icon}
@@ -146,7 +234,7 @@ export default function HomeScreen() {
             <Image source={require('@/assets/images/img0apprentissage0.png')} style={styles.tabIcon} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.push('/login/3-5/messages')}>
+          <TouchableOpacity onPress={() => router.push('/login/messages')}>
             <Image source={require('@/assets/images/img0messages0.png')} style={styles.tabIcon} />
           </TouchableOpacity>
 

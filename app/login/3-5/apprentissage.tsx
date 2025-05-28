@@ -41,56 +41,144 @@ export default function HomeScreen() {
         <ScrollView contentContainerStyle={styles.scroll}>
           {/* Routine 卡片 */}
           <View style={styles.grid}>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Règles de classe',
+                    imageKey: 'regleclasse',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Img regles de classe.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Règles de classe</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Les consignes',
+                    imageKey: 'consigne',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Img consignes.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Les consignes</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Une image, un mot',
+                    imageKey: 'imagemot',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Img une image un mot.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Une image, un mot</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Quand je suis... je peux',
+                    imageKey: 'quandjesuisjepeux',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Img quand je suis.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Quand je suis... je peux</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Règles de classe',
+                    imageKey: 'regleclasse',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Img regles de classe.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Règles de classe</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Les consignes',
+                    imageKey: 'consigne',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Img consignes.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Les consignes</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Une image, un mot',
+                    imageKey: 'imagemot',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Img une image un mot.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Une image, un mot</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Quand je suis... je peux',
+                    imageKey: 'quandjesuisjepeux',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Img quand je suis.png')}
                 style={styles.icon}
@@ -146,7 +234,7 @@ export default function HomeScreen() {
             <Image source={require('@/assets/images/img0apprentissage1.png')} style={styles.tabIcon} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.push('/login/3-5/messages')}>
+          <TouchableOpacity onPress={() => router.push('/login/messages')}>
             <Image source={require('@/assets/images/img0messages0.png')} style={styles.tabIcon} />
           </TouchableOpacity>
 

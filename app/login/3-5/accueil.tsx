@@ -159,7 +159,7 @@ export default function HomeScreen() {
             <Image source={require('@/assets/images/img0apprentissage0.png')} style={styles.tabIcon} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.push('/login/3-5/messages')}>
+          <TouchableOpacity onPress={() => router.push('/login/messages')}>
             <Image source={require('@/assets/images/img0messages0.png')} style={styles.tabIcon} />
           </TouchableOpacity>
 

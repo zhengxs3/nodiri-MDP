@@ -50,7 +50,7 @@ export default function HomeScreen() {
               <TouchableOpacity
                 key={num}
                 style={styles.conversationCard}
-                onPress={() => router.push(`/login/3-5/conversation/${num}`)}
+                onPress={() => router.push(`/login/conversation/${num}`)}
               >
                 <Text style={styles.conversationTitle}>Conversation {num}</Text>
                 <Text style={styles.conversationText}>
@@ -108,7 +108,7 @@ export default function HomeScreen() {
             <Image source={require('@/assets/images/img0apprentissage0.png')} style={styles.tabIcon} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.push('/login/3-5/messages')}>
+          <TouchableOpacity onPress={() => router.push('/login/messages')}>
             <Image source={require('@/assets/images/img0messages1.png')} style={styles.tabIcon} />
           </TouchableOpacity>
         </View>
