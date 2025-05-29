@@ -61,11 +61,11 @@ export default function HomeScreen() {
         {/* Menu déroulant */}
         {menuVisible && (
           <View style={styles.popupMenu} onStartShouldSetResponder={() => true}>
-            <TouchableOpacity onPress={() => console.log('Aide')}>
+            <TouchableOpacity onPress={() => router.push('/login/aide')}>
               <Text style={styles.menuItem}>Aide</Text>
             </TouchableOpacity>
             <View style={styles.menuSeparator} />
-            <TouchableOpacity onPress={() => console.log('Paramètres')}>
+            <TouchableOpacity onPress={() => router.push('/login/parametre')}>
               <Text style={styles.menuItem}>Paramètres</Text>
             </TouchableOpacity>
             <View style={styles.menuSeparator} />

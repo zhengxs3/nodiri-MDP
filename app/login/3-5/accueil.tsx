@@ -41,28 +41,28 @@ export default function HomeScreen() {
         <ScrollView contentContainerStyle={styles.scroll}>
           {/* Routine 卡片 */}
           <View style={styles.grid}>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity style={styles.card} onPress={() => router.push('/login/3-5/routine')}>
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 1.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Se réveiller</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity style={styles.card} onPress={() => router.push('/login/3-5/routine')}>
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 7.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Déjeuner</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity style={styles.card} onPress={() => router.push('/login/3-5/routine')}>
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 3.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Faire sa toilette</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity style={styles.card} onPress={() => router.push('/login/3-5/routine')}>
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 5.png')}
                 style={styles.icon}
@@ -76,14 +76,36 @@ export default function HomeScreen() {
             <Text style={styles.sectionTitle}>Boîte à outils</Text>
           </TouchableOpacity>
           <View style={styles.grid}>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Les émotions',
+                    imageKey: 'emotion',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img emotion.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Les émotions</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Les mots magiques',
+                    imageKey: 'motmagiques',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img mots magiques.png')}
                 style={styles.icon}
@@ -97,14 +119,36 @@ export default function HomeScreen() {
             <Text style={styles.sectionTitle}>Apprentissage</Text>
           </TouchableOpacity>
           <View style={styles.grid}>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Règles de classe',
+                    imageKey: 'regleclasse',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/img3regleclasse.png')}
                 style={styles.icon}
               />
               <Text style={styles.cardLabel}>Règles de classe</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/login/detail',
+                  params: {
+                    title: 'Les consignes',
+                    imageKey: 'consigne',
+                  },
+                })
+              }
+            >
               <Image
                 source={require('@/assets/images/img3consigne.png')}
                 style={styles.icon}
@@ -120,11 +164,11 @@ export default function HomeScreen() {
             style={styles.popupMenu}
             onStartShouldSetResponder={() => true}
           >
-            <TouchableOpacity onPress={() => console.log('Aide')}>
+            <TouchableOpacity onPress={() => router.push('/login/aide')}>
               <Text style={styles.menuItem}>Aide</Text>
             </TouchableOpacity>
             <View style={styles.menuSeparator} />
-            <TouchableOpacity onPress={() => console.log('Paramètres')}>
+            <TouchableOpacity onPress={() => router.push('/login/parametre')}>
               <Text style={styles.menuItem}>Paramètres</Text>
             </TouchableOpacity>
             <View style={styles.menuSeparator} />

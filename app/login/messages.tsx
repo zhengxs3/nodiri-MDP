@@ -39,7 +39,7 @@ export default function HomeScreen() {
         {/* 🔽 内容区域 */}
         <ScrollView contentContainerStyle={styles.scroll}>
           {/* 添加新对话按钮 */}
-          <TouchableOpacity style={styles.addEventBtn} onPress={() => router.push('/login/3-5/ajouterMessage')}>
+          <TouchableOpacity style={styles.addEventBtn} onPress={() => router.push('/login/ajouterMessage')}>
             <Image source={require('@/assets/images/plus.png')} style={{ width: 18, height: 19, marginRight: 8 }} />
             <Text style={styles.addEventText}>Démarrer une conversation</Text>
           </TouchableOpacity>
@@ -69,11 +69,11 @@ export default function HomeScreen() {
             style={styles.popupMenu}
             onStartShouldSetResponder={() => true}
           >
-            <TouchableOpacity onPress={() => console.log('Aide')}>
+            <TouchableOpacity onPress={() => router.push('/login/aide')}>
               <Text style={styles.menuItem}>Aide</Text>
             </TouchableOpacity>
             <View style={styles.menuSeparator} />
-            <TouchableOpacity onPress={() => console.log('Paramètres')}>
+            <TouchableOpacity onPress={() => router.push('/login/parametre')}>
               <Text style={styles.menuItem}>Paramètres</Text>
             </TouchableOpacity>
             <View style={styles.menuSeparator} />
