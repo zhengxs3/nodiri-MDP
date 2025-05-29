@@ -57,9 +57,15 @@ export default function BoiteOutilsDetail() {
       <View style={styles.footer}>
         <Text style={styles.footerText}>{title}</Text>
         <View style={styles.actions}>
-          <Image source={require('@/assets/images/iconHelp.png')} style={styles.icon} />
-          <Image source={require('@/assets/images/iconCheck.png')} style={styles.icon} />
-          <Image source={require('@/assets/images/iconDownload.png')} style={styles.icon} />
+          <TouchableOpacity onPress={() => router.push('/login/aide')} >
+            <Image source={require('@/assets/images/iconHelp.png')} style={styles.icon} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Image source={require('@/assets/images/iconCheck.png')} style={styles.icon} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={require('@/assets/images/iconDownload.png')} style={styles.icon} />
+          </TouchableOpacity>          
         </View>
       </View>
     </View>
