@@ -16,7 +16,8 @@ const userProgressRoutes = require("./routes/userLearningProgress.routes");
 const permissionsRoutes = require("./routes/permissions.routes");
 const userPermissionsRoutes = require("./routes/userPermission.routes");
 const modulePermissionsRoutes = require("./routes/modulePermission.routes");
-
+const authRoutes = require("./routes/auth.routes");
+const profileRoutes = require("./routes/profile.routes");
 
 
 dotenv.config();
@@ -25,6 +26,13 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Routes auth (/api/login)
+app.use("/api", authRoutes); 
+
+// Routes rôles 
+app.use("/api", profileRoutes);
+
 // Routes Users
 app.use("/api/users", userRoutes);
 // Routes Messages

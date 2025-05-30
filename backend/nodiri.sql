@@ -216,8 +216,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(100) NOT NULL,
   `password` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `role` varchar(20) NOT NULL,
-  `firstname` varchar(20) DEFAULT NULL,
-  `lastname` varchar(20) DEFAULT NULL,
   `birthdate` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
