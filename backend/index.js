@@ -18,6 +18,11 @@ const userPermissionsRoutes = require("./routes/userPermission.routes");
 const modulePermissionsRoutes = require("./routes/modulePermission.routes");
 const authRoutes = require("./routes/auth.routes");
 const profileRoutes = require("./routes/profile.routes");
+const adminRoutes = require("./routes/admin.routes");
+const challengeRoutes = require("./routes/challenges.routes");
+const userChallengeRoutes = require("./routes/userChallenges.routes");
+
+
 
 
 dotenv.config();
@@ -32,6 +37,8 @@ app.use("/api", authRoutes);
 
 // Routes rôles 
 app.use("/api", profileRoutes);
+app.use("/api", adminRoutes);
+
 
 // Routes Users
 app.use("/api/users", userRoutes);
@@ -61,7 +68,9 @@ app.use("/api/permissions", permissionsRoutes);
 app.use("/api/user-permissions", userPermissionsRoutes);
 // Routes module permissions
 app.use("/api/module-permissions", modulePermissionsRoutes);
-
+// Routes Challenge
+app.use("/api/challenges", challengeRoutes);
+app.use("/api/user-challenges", userChallengeRoutes);
 
 
 
