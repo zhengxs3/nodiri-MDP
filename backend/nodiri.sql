@@ -52,6 +52,8 @@ CREATE TABLE IF NOT EXISTS `emotions` (
   `emotion_type` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ALTER TABLE emotions ADD COLUMN pictogram_id INT DEFAULT NULL;
+ALTER TABLE emotions ADD CONSTRAINT fk_emotion_pictogram FOREIGN KEY (pictogram_id) REFERENCES pictograms(id);
 
 -- --------------------------------------------------------
 
@@ -135,6 +137,8 @@ CREATE TABLE IF NOT EXISTS `messages` (
   KEY `sender` (`sender`),
   KEY `receiver` (`receiver`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ALTER TABLE messages ADD COLUMN pictogram_id INT DEFAULT NULL;
+ALTER TABLE messages ADD CONSTRAINT fk_message_pictogram FOREIGN KEY (pictogram_id) REFERENCES pictograms(id);
 
 -- --------------------------------------------------------
 
@@ -220,6 +224,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ALTER TABLE users ADD COLUMN parent_code VARCHAR(10) DEFAULT NULL;
 
 --
 -- Dumping data for table `users`
@@ -277,6 +282,13 @@ CREATE TABLE IF NOT EXISTS `user_permission` (
   KEY `user_id` (`user_id`),
   KEY `permission_id` (`permission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE pictograms (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  category ENUM('emotion', 'message') NOT NULL,
+  image_url TEXT NOT NULL
+);
 
 --
 -- Constraints for dumped tables
