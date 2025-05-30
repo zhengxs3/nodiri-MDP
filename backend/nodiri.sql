@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 27, 2025 at 07:31 PM
+-- Generation Time: May 30, 2025 at 09:57 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.3.6
 
@@ -43,6 +43,33 @@ CREATE TABLE IF NOT EXISTS `agenda` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `challenges`
+--
+
+DROP TABLE IF EXISTS `challenges`;
+CREATE TABLE IF NOT EXISTS `challenges` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) NOT NULL,
+  `description` text,
+  `image_url` text,
+  `created_by` int DEFAULT NULL,
+  `target_role` enum('child','teen','young_adult') DEFAULT 'child',
+  `is_active` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `created_by` (`created_by`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `challenges`
+--
+
+INSERT INTO `challenges` (`id`, `title`, `description`, `image_url`, `created_by`, `target_role`, `is_active`) VALUES
+(1, 'Organise ta semaine', 'Utilise un planning visuel pour organiser ta semaine', 'https://cdn.nodiri/challenges/semaine.png', 1, 'child', 1),
+(2, 'Fais un exercice de respiration', 'Choisis un moment calme et respire profondément 5 fois', 'https://cdn.nodiri/challenges/respiration.png', 1, 'child', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `emotions`
 --
 
@@ -52,8 +79,6 @@ CREATE TABLE IF NOT EXISTS `emotions` (
   `emotion_type` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-ALTER TABLE emotions ADD COLUMN pictogram_id INT DEFAULT NULL;
-ALTER TABLE emotions ADD CONSTRAINT fk_emotion_pictogram FOREIGN KEY (pictogram_id) REFERENCES pictograms(id);
 
 -- --------------------------------------------------------
 
@@ -137,8 +162,6 @@ CREATE TABLE IF NOT EXISTS `messages` (
   KEY `sender` (`sender`),
   KEY `receiver` (`receiver`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-ALTER TABLE messages ADD COLUMN pictogram_id INT DEFAULT NULL;
-ALTER TABLE messages ADD CONSTRAINT fk_message_pictogram FOREIGN KEY (pictogram_id) REFERENCES pictograms(id);
 
 -- --------------------------------------------------------
 
@@ -193,6 +216,20 @@ CREATE TABLE IF NOT EXISTS `permissions` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pictograms`
+--
+
+DROP TABLE IF EXISTS `pictograms`;
+CREATE TABLE IF NOT EXISTS `pictograms` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `image_url` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `routines`
 --
 
@@ -210,6 +247,23 @@ CREATE TABLE IF NOT EXISTS `routines` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `routine_events`
+--
+
+DROP TABLE IF EXISTS `routine_events`;
+CREATE TABLE IF NOT EXISTS `routine_events` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `pictogram_id` int NOT NULL,
+  `event_date` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `pictogram_id` (`pictogram_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -221,17 +275,36 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `role` varchar(20) NOT NULL,
   `birthdate` date DEFAULT NULL,
+  `parent_code` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-ALTER TABLE users ADD COLUMN parent_code VARCHAR(10) DEFAULT NULL;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `firstname`, `lastname`, `birthdate`) VALUES
-(1, 'jane_doe', 'jane@example.com', '$2b$10$kZaqi/0X7Chqi.UzNmSNx.PbP.Si2GMidGjvKJPaR9dNVMYv2gtTm', 'parent', 'Jane', 'Doe', '2000-04-12');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `birthdate`, `parent_code`) VALUES
+(1, 'jane_doe', 'jane@example.com', '$2b$10$kZaqi/0X7Chqi.UzNmSNx.PbP.Si2GMidGjvKJPaR9dNVMYv2gtTm', 'parent', '2000-04-12', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_challenges`
+--
+
+DROP TABLE IF EXISTS `user_challenges`;
+CREATE TABLE IF NOT EXISTS `user_challenges` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `challenge_id` int NOT NULL,
+  `assigned_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `is_completed` tinyint(1) DEFAULT '0',
+  `completed_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `challenge_id` (`challenge_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -283,13 +356,6 @@ CREATE TABLE IF NOT EXISTS `user_permission` (
   KEY `permission_id` (`permission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE pictograms (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  category ENUM('emotion', 'message') NOT NULL,
-  image_url TEXT NOT NULL
-);
-
 --
 -- Constraints for dumped tables
 --
@@ -299,6 +365,12 @@ CREATE TABLE pictograms (
 --
 ALTER TABLE `agenda`
   ADD CONSTRAINT `agenda_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `challenges`
+--
+ALTER TABLE `challenges`
+  ADD CONSTRAINT `challenges_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `forum_comments`
@@ -339,6 +411,20 @@ ALTER TABLE `password_reset_tokens`
 --
 ALTER TABLE `routines`
   ADD CONSTRAINT `routines_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `routine_events`
+--
+ALTER TABLE `routine_events`
+  ADD CONSTRAINT `routine_events_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `routine_events_ibfk_2` FOREIGN KEY (`pictogram_id`) REFERENCES `pictograms` (`id`);
+
+--
+-- Constraints for table `user_challenges`
+--
+ALTER TABLE `user_challenges`
+  ADD CONSTRAINT `user_challenges_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `user_challenges_ibfk_2` FOREIGN KEY (`challenge_id`) REFERENCES `challenges` (`id`);
 
 --
 -- Constraints for table `user_emotion`
