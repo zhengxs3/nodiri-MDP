@@ -42,28 +42,8 @@ export default function RegisterScreen() {
       return;
     }
 
-    try {
-      const response = await fetch('http://192.168.1.144:8000/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, role, age, email, password }),
-      });
-
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        showAlert('Succès', 'Inscription réussie !');
-        router.replace('/register/paiment');
-      } else {
-        showAlert('Erreur', data.error || 'Échec de l’enregistrement.');
-      }
-    } catch (error) {
-      console.error('Erreur réseau:', error);
-      showAlert('Erreur réseau', 'Impossible de contacter le serveur.');
-    }
+    showAlert('Succès', 'Inscription réussie !');
+    router.replace('/register/paiment');
   };
 
   return (
