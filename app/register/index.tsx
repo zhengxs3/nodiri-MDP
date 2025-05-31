@@ -1,4 +1,5 @@
 import SimpleSelect from '@/components/SimpleSelect';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -27,16 +28,33 @@ export default function RegisterScreen() {
 
   const [name, setName] = useState('');
   const [role, setRole] = useState('');
+  const [birthDateText, setBirthDateText] = useState(''); // format YYYY-MM-DD
+  const [birthDate, setBirthDate] = useState<Date | undefined>();
+  const [showPicker, setShowPicker] = useState(false);
   const [age, setAge] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSubmit = async () => {
-    if (!name || !role || !age || !email || !password || !confirmPassword) {
+    const birthValue =
+      Platform.OS === 'web'
+        ? birthDateText
+        : birthDate?.toISOString().split('T')[0];
+
+    if (
+      !name ||
+      !role ||
+      !age ||
+      !birthValue ||
+      !email ||
+      !password ||
+      !confirmPassword
+    ) {
       showAlert('Champs obligatoires', 'Veuillez remplir tous les champs obligatoires.');
       return;
     }
+
     if (password !== confirmPassword) {
       showAlert('Erreur', 'Les mots de passe ne correspondent pas.');
       return;
@@ -51,10 +69,7 @@ export default function RegisterScreen() {
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView
-        contentContainerStyle={styles.scroll}
-        keyboardShouldPersistTaps="handled"
-      >
+      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <View style={styles.container}>
           <Image source={require('@/assets/images/logo.png')} style={styles.logo} />
           <Text style={styles.title}>Inscription</Text>
@@ -79,6 +94,57 @@ export default function RegisterScreen() {
               { label: "Professionnel de l'éducation", value: 'education' },
             ]}
           />
+
+          {/* Date de naissance */}
+          <View style={styles.field}>
+            <Text style={styles.label}>Date de naissance *</Text>
+            {Platform.OS === 'web' ? (
+              <input
+                type="date"
+                value={birthDateText}
+                onChange={(e) => {
+                  setBirthDateText(e.target.value); // format YYYY-MM-DD
+                }}
+                max={new Date().toISOString().split('T')[0]}
+                style={{
+                  width: '93%',
+                  height: 44,
+                  fontSize: 14,
+                  padding: '0 12px',
+                  border: '1px solid #333',
+                  borderRadius: 4,
+                  backgroundColor: 'white',
+                  fontFamily: 'inherit',
+                }}
+              />
+            ) : (
+              <>
+                <TouchableOpacity onPress={() => setShowPicker(true)}>
+                  <TextInput
+                    style={styles.input}
+                    value={birthDate ? birthDate.toLocaleDateString('fr-FR') : ''}
+                    placeholder="JJ/MM/AAAA"
+                    editable={false}
+                    pointerEvents="none"
+                  />
+                </TouchableOpacity>
+                {showPicker && (
+                  <DateTimePicker
+                    value={birthDate || new Date()}
+                    mode="date"
+                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                    maximumDate={new Date()}
+                    onChange={(event, selectedDate) => {
+                      setShowPicker(false);
+                      if (selectedDate) {
+                        setBirthDate(selectedDate);
+                      }
+                    }}
+                  />
+                )}
+              </>
+            )}
+          </View>
 
           {/* Âge */}
           <SimpleSelect
@@ -108,7 +174,7 @@ export default function RegisterScreen() {
             />
           </View>
 
-          {/* Password */}
+          {/* Mot de passe */}
           <View style={styles.field}>
             <Text style={styles.label}>Mot de passe *</Text>
             <TextInput
@@ -119,7 +185,7 @@ export default function RegisterScreen() {
             />
           </View>
 
-          {/* Confirm Password */}
+          {/* Validation mot de passe */}
           <View style={styles.field}>
             <Text style={styles.label}>Validation du mot de passe *</Text>
             <TextInput
