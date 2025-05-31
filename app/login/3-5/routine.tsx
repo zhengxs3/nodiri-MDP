@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useRouter } from 'expo-router'; 
 import { useState } from 'react';
 import {
   Image,
@@ -10,6 +10,11 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+
+const jours = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+const mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+const today = new Date();
+const dateFormatted = `${jours[today.getDay()]} ${today.getDate()} ${mois[today.getMonth()]}`;
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -38,7 +43,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
 
           {/* 日期标题 */}
-          <Text style={styles.dateText}>Mardi 2 Avril</Text>
+          <Text style={styles.dateText}>{dateFormatted}</Text>
 
           {/* Routine 表格 */}
           <View style={styles.table}>
@@ -90,7 +95,7 @@ export default function HomeScreen() {
           <TouchableOpacity onPress={() => router.push('/login/3-5/accueil')}>
             <Image source={require('@/assets/images/img0accueil0.png')} style={styles.tabIcon} />
           </TouchableOpacity>
-          
+
           <TouchableOpacity onPress={() => router.push('/login/3-5/apprentissage')}>
             <Image source={require('@/assets/images/img0apprentissage0.png')} style={styles.tabIcon} />
           </TouchableOpacity>
@@ -98,7 +103,6 @@ export default function HomeScreen() {
           <TouchableOpacity onPress={() => router.push('/login/messages')}>
             <Image source={require('@/assets/images/img0messages0.png')} style={styles.tabIcon} />
           </TouchableOpacity>
-
         </View>
       </View>
     </TouchableWithoutFeedback>
