@@ -3,6 +3,7 @@ import { useState } from 'react';
 import {
   Image,
   Platform,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -192,15 +193,34 @@ export default function HomeScreen() {
             <Text style={styles.sectionTitle}>Livre</Text>
           </TouchableOpacity>
           <View style={styles.grid}>
-            <TouchableOpacity
-              style={styles.card}
-            >
-              <Image
-                source={require('@/assets/images/imgAppliNodiri/mockup couverture simon.png')}
-                style={styles.icon}
-              />
-              <Text style={styles.cardLabel}>Simon</Text>
-            </TouchableOpacity>
+<TouchableOpacity
+  style={styles.card}
+  onPress={() => {
+    const pdfPreviewUrl =
+      'https://drive.google.com/file/d/1L65CW7MeyNSiiRhQGSQ34BHiA_-zzRIF/preview';
+
+    if (Platform.OS === 'web') {
+      window.open(pdfPreviewUrl, '_blank');
+    } else {
+      router.push({
+        pathname: '/login/pdfViewer',
+        params: {
+          pdfUri: pdfPreviewUrl,
+        },
+      });
+    }
+  }}
+>
+
+
+  <Image
+    source={require('@/assets/images/imgAppliNodiri/mockup couverture simon.png')}
+    style={styles.icon}
+  />
+  <Text style={styles.cardLabel}>mockup couverture simon</Text>
+</TouchableOpacity>
+
+
            
           </View>
 
