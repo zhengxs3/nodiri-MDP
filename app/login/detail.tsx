@@ -4,15 +4,25 @@ import {
   useFonts,
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
+import { Asset } from 'expo-asset';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
-  Image,
+  Alert,
   Platform,
+  Image as RNImage,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+
+const showAlert = (title: string, message: string) => {
+  if (Platform.OS === 'web') {
+    alert(`${title}\n\n${message}`);
+  } else {
+    Alert.alert(title, message);
+  }
+};
 
 export default function BoiteOutilsDetail() {
   const { title, imageKey } = useLocalSearchParams();
@@ -32,40 +42,45 @@ export default function BoiteOutilsDetail() {
     motmagiques: require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Les mots magiques.png'),
     meteo: require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/La meteo.png'),
     communication: require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/La communication.png'),
-    
     regleclasse: require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Les regles de classe.png'),
     consigne: require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Les consignes.png'),
     imagemot: require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Une image un mot.png'),
     quandjesuisjepeux: require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Quand je suis... je peux.png'),
   };
 
+  const selected = imageMap[imageKey as string];
+  const imageUri = Asset.fromModule(selected).uri || RNImage.resolveAssetSource(selected).uri;
+
+  const handleShowImagePath = () => {
+    const fakePath = Object.entries(imageMap).find(([, val]) => val === selected)?.[0];
+    if (Platform.OS === 'web') {
+      showAlert('Chemin de l’image', fakePath || 'image inconnue');
+    } else {
+      showAlert('Téléchargement simulé', `Image prête : ${fakePath || 'image inconnue'}`);
+    }
+  };
+
+
   return (
     <View style={styles.container}>
-      {/* 左上角返回箭头 */}
       <TouchableOpacity onPress={() => router.back()} style={styles.topLeftIcon}>
-        <Image source={require('@/assets/images/Group 183.png')} style={styles.icon} />
+        <RNImage source={require('@/assets/images/Group 183.png')} style={styles.icon} />
       </TouchableOpacity>
 
-      {/* 主图像区域 */}
-      <Image
-        source={imageMap[imageKey as string]}
-        style={styles.detailImage}
-        resizeMode="contain"
-      />
+      <RNImage source={{ uri: imageUri }} style={styles.detailImage} resizeMode="contain" />
 
-      {/* 底部固定按钮栏 */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>{title}</Text>
         <View style={styles.actions}>
-          <TouchableOpacity onPress={() => router.push('/login/aide')} >
-            <Image source={require('@/assets/images/iconHelp.png')} style={styles.icon} />
+          <TouchableOpacity onPress={() => router.push('/login/aide')}>
+            <RNImage source={require('@/assets/images/iconHelp.png')} style={styles.icon} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => router.back()}>
-            <Image source={require('@/assets/images/iconCheck.png')} style={styles.icon} />
+            <RNImage source={require('@/assets/images/iconCheck.png')} style={styles.icon} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={require('@/assets/images/iconDownload.png')} style={styles.icon} />
-          </TouchableOpacity>          
+          <TouchableOpacity onPress={handleShowImagePath}>
+            <RNImage source={require('@/assets/images/iconDownload.png')} style={styles.icon} />
+          </TouchableOpacity>
         </View>
       </View>
     </View>
