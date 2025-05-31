@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
+const BUTTON_WIDTH = 250;
 
 export default function WelcomeScreen() {
   const router = useRouter();
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#32849B',
+    backgroundColor: '#388AA8',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -69,13 +70,14 @@ const styles = StyleSheet.create({
   primaryButton: {
     backgroundColor: 'white',
     paddingVertical: 12,
-    paddingHorizontal: 30,
+    width: BUTTON_WIDTH,
+    alignItems: 'center',
     borderRadius: 25,
     marginBottom: 15,
     zIndex: 10,
   },
   primaryButtonText: {
-    color: '#32849B',
+    color: '#388AA8',
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 16,
   },
@@ -83,7 +85,8 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderWidth: 1,
     paddingVertical: 12,
-    paddingHorizontal: 30,
+    width: BUTTON_WIDTH,
+    alignItems: 'center',
     borderRadius: 25,
     zIndex: 10,
   },

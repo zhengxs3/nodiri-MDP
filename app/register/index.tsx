@@ -31,7 +31,6 @@ export default function RegisterScreen() {
   const [birthDateText, setBirthDateText] = useState(''); // format YYYY-MM-DD
   const [birthDate, setBirthDate] = useState<Date | undefined>();
   const [showPicker, setShowPicker] = useState(false);
-  const [age, setAge] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -45,7 +44,6 @@ export default function RegisterScreen() {
     if (
       !name ||
       !role ||
-      !age ||
       !birthValue ||
       !email ||
       !password ||
@@ -145,22 +143,6 @@ export default function RegisterScreen() {
               </>
             )}
           </View>
-
-          {/* Âge */}
-          <SimpleSelect
-            label="Âge (de l’enfant)"
-            required
-            selected={age}
-            onSelect={setAge}
-            options={[
-              { label: 'Sélectionner -', value: '' },
-              { label: '3–5 ans', value: '3-5' },
-              { label: '6–10 ans', value: '6-10' },
-              { label: '11–14 ans', value: '11-14' },
-              { label: '15+', value: '15+' },
-              { label: 'Professionnel', value: 'pro' },
-            ]}
-          />
 
           {/* Email */}
           <View style={styles.field}>

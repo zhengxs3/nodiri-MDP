@@ -187,6 +187,23 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
 
+          {/* Livre */}
+          <TouchableOpacity onPress={() => router.push('/login/3-5/apprentissage')}>
+            <Text style={styles.sectionTitle}>Livre</Text>
+          </TouchableOpacity>
+          <View style={styles.grid}>
+            <TouchableOpacity
+              style={styles.card}
+            >
+              <Image
+                source={require('@/assets/images/imgAppliNodiri/mockup couverture simon.png')}
+                style={styles.icon}
+              />
+              <Text style={styles.cardLabel}>mockup couverture simon</Text>
+            </TouchableOpacity>
+           
+          </View>
+
         </ScrollView>
 
         {/* ✅ popupMenu 放在 ScrollView 外部，固定在右上角 */}
