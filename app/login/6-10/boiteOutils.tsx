@@ -48,17 +48,17 @@ export default function HomeScreen() {
                 router.push({
                   pathname: '/login/detail',
                   params: {
-                    title: 'Les émotions',
-                    imageKey: 'emotion',
+                    title: 'La fusee du calme',
+                    imageKey: 'fuseecalme',
                   },
                 })
               }
             >
               <Image
-                source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img emotion.png')}
+                source={require('@/assets/images/imgAppliNodiri/6-10 ans/Boite a outils/Img fusee du calme.png')}
                 style={styles.icon}
               />
-              <Text style={styles.cardLabel}>Les émotions</Text>
+              <Text style={styles.cardLabel}>La fusée du calme</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.card}
@@ -66,125 +66,17 @@ export default function HomeScreen() {
                 router.push({
                   pathname: '/login/detail',
                   params: {
-                    title: 'Les mots magiques',
-                    imageKey: 'motmagiques',
+                    title: 'A la maison',
+                    imageKey: 'gomaison',
                   },
                 })
               }
             >
               <Image
-                source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img mots magiques.png')}
+                source={require('@/assets/images/imgAppliNodiri/6-10 ans/Boite a outils/Img a la maison.png')}
                 style={styles.icon}
               />
-              <Text style={styles.cardLabel}>Les mots magiques</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() =>
-                router.push({
-                  pathname: '/login/detail',
-                  params: {
-                    title: 'La météo',
-                    imageKey: 'meteo',
-                  },
-                })
-              }
-            >
-              <Image
-                source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img meteo.png')}
-                style={styles.icon}
-              />
-              <Text style={styles.cardLabel}>La météo</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() =>
-                router.push({
-                  pathname: '/login/detail',
-                  params: {
-                    title: 'La communication',
-                    imageKey: 'communication',
-                  },
-                })
-              }
-            >
-              <Image
-                source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img communication.png')}
-                style={styles.icon}
-              />
-              <Text style={styles.cardLabel}>La communication</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() =>
-                router.push({
-                  pathname: '/login/detail',
-                  params: {
-                    title: 'Les émotions',
-                    imageKey: 'emotion',
-                  },
-                })
-              }
-            >
-              <Image
-                source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img emotion.png')}
-                style={styles.icon}
-              />
-              <Text style={styles.cardLabel}>Les émotions</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() =>
-                router.push({
-                  pathname: '/login/detail',
-                  params: {
-                    title: 'Les mots magiques',
-                    imageKey: 'motmagiques',
-                  },
-                })
-              }
-            >
-              <Image
-                source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img mots magiques.png')}
-                style={styles.icon}
-              />
-              <Text style={styles.cardLabel}>Les mots magiques</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() =>
-                router.push({
-                  pathname: '/login/detail',
-                  params: {
-                    title: 'La météo',
-                    imageKey: 'meteo',
-                  },
-                })
-              }
-            >
-              <Image
-                source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img meteo.png')}
-                style={styles.icon}
-              />
-              <Text style={styles.cardLabel}>La météo</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() =>
-                router.push({
-                  pathname: '/login/detail',
-                  params: {
-                    title: 'La communication',
-                    imageKey: 'communication',
-                  },
-                })
-              }
-            >
-              <Image
-                source={require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Img communication.png')}
-                style={styles.icon}
-              />
-              <Text style={styles.cardLabel}>La communication</Text>
+              <Text style={styles.cardLabel}>A la maison</Text>
             </TouchableOpacity>
           </View>
 

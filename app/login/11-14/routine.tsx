@@ -39,7 +39,7 @@ export default function HomeScreen() {
 
         <ScrollView contentContainerStyle={styles.scroll}>
           {/* 添加事件 */}
-          <TouchableOpacity style={styles.addEventBtn} onPress={() => router.push('/login/3-5/ajouterEvenement')}>
+          <TouchableOpacity style={styles.addEventBtn} onPress={() => router.push('/login/11-14/ajouterEvenement')}>
             <Image source={require('@/assets/images/plus.png')} style={{ width: 18, height: 19, marginRight: 8 }} />
             <Text style={styles.addEventText}>Ajouter un événement</Text>
           </TouchableOpacity>

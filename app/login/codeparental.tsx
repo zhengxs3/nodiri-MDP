@@ -48,8 +48,11 @@ export default function ParentalCodeScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <View style={styles.wrapper}>
-          {/* 顶部标题 */}
+          {/* 顶部标题区域 */}
           <View style={styles.headerRow}>
+            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+              <Image source={require('@/assets/images/left.png')} style={styles.backIcon} />
+            </TouchableOpacity>
             <Text style={styles.centeredTitle}>Code parental</Text>
             <TouchableOpacity
               style={styles.menuButton}
@@ -96,18 +99,29 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop: Platform.OS === 'web' ? 0 : 20,
   },
   headerRow: {
     height: 70,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
-    paddingTop: Platform.OS === 'web' ? 10 : 20,
+  },
+  backButton: {
+    position: 'absolute',
+    left: 15,
+    top: Platform.OS === 'web' ? 10 : 20,
+    padding: 5,
+  },
+  backIcon: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
   },
   centeredTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#2F7C8D',
+    color: '#2F7C8D', 
   },
   menuButton: {
     position: 'absolute',

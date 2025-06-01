@@ -42,10 +42,14 @@ export default function BoiteOutilsDetail() {
     motmagiques: require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Les mots magiques.png'),
     meteo: require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/La meteo.png'),
     communication: require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/La communication.png'),
+    
     regleclasse: require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Les regles de classe.png'),
     consigne: require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Les consignes.png'),
     imagemot: require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Une image un mot.png'),
     quandjesuisjepeux: require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Quand je suis... je peux.png'),
+    
+    fuseecalme: require('@/assets/images/imgAppliNodiri/6-10 ans/Boite a outils/La fusee du calme.png'),
+    gomaison: require('@/assets/images/imgAppliNodiri/6-10 ans/Boite a outils/A la maison je peux.png'),
   };
 
   const selected = imageMap[imageKey as string];

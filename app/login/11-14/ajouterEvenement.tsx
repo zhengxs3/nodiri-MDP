@@ -10,102 +10,68 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-
-const jours = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-const mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-const today = new Date();
-const dateFormatted = `${jours[today.getDay()]} ${today.getDate()} ${mois[today.getMonth()]}`;
+import PopupMenu from '../PopupMenu';
+import BottomTabBar from './BottomTabBar';
 
 export default function HomeScreen() {
   const router = useRouter();
   const [menuVisible, setMenuVisible] = useState(false);
-  const [selectedCards, setSelectedCards] = useState([null, null, null, null]);
 
   const handleOutsidePress = () => {
     if (menuVisible) setMenuVisible(false);
   };
 
-  const handleCardPress = (image, label) => {
-    const nextIndex = selectedCards.findIndex((c) => c === null);
-    if (nextIndex === -1) return;
-    const updated = [...selectedCards];
-    updated[nextIndex] = { image, label };
-    setSelectedCards(updated);
-  };
-
-  const handleSlotPress = (index) => {
-    const updated = [...selectedCards];
-    updated[index] = null;
-    setSelectedCards(updated);
-  };
-
   return (
     <TouchableWithoutFeedback onPress={handleOutsidePress}>
       <View style={styles.wrapper}>
+        {/* 🔼 顶部标题 + 菜单 */}
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Image source={require('@/assets/images/left.png')} style={styles.backIcon} />
+          <Text style={styles.centeredTitle}>Agenda</Text>
+          <TouchableOpacity style={styles.menuButton} onPress={() => setMenuVisible(!menuVisible)}>
+            <Image source={require('@/assets/images/3points.png')} style={{ width: 24, height: 24 }} />
           </TouchableOpacity>
-          <View style={styles.headerCenter}>
-            <Text style={styles.centeredTitle}>Ajouter un évènement</Text>
-          </View>
         </View>
 
         <ScrollView contentContainerStyle={styles.scroll}>
-          <Text style={styles.dateText}>{dateFormatted}</Text>
+          
 
-          <View style={styles.table}>
-            {Array.from({ length: 4 }).map((_, index) => (
-              <View key={index} style={styles.tableRow}>
-                <TouchableOpacity
-                  style={styles.leftCell}
-                  onPress={() => handleSlotPress(index)}
+          {/* 月份日历（静态模拟） */}
+          <Text style={styles.monthTitle}>Avril</Text>
+          <View style={styles.calendar}>
+            {Array.from({ length: 30 }).map((_, i) => {
+              const day = i + 1;
+              const isToday = day === 2;
+              return (
+                <View
+                  key={day}
+                  style={[
+                    styles.calendarCell,
+                    isToday && { backgroundColor: '#388AA8' }
+                  ]}
                 >
-                  {selectedCards[index] && (
-                    <Image source={selectedCards[index].image} style={styles.icon} />
-                  )}
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.rightCell}
-                  onPress={() => handleSlotPress(index)}
-                >
-                  {selectedCards[index] && (
-                    <Text style={{ padding: 10 }}>{selectedCards[index].label}</Text>
-                  )}
-                </TouchableOpacity>
+                  <Text style={[styles.calendarText, isToday && { color: 'white' }]}>{day}</Text>
+                </View>
+              );
+            })}
+          </View>
+
+          {/* 时间安排 */}
+          <Text style={styles.selectedDate}>Mardi 2 Avril</Text>
+          <View style={styles.scheduleRow}>
+            {['8h', '9h', '10h', '11h', '12h'].map((hour, i) => (
+              <View key={i} style={styles.scheduleBlock}>
+                <Text style={styles.hourText}>{hour}</Text>
+                <Text style={styles.eventText}>{['Réveil', 'Ecole', 'Ecole', 'Ecole', '...'][i]}</Text>
               </View>
             ))}
           </View>
-
-          <View style={styles.grid}>
-            {[{
-              image: require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 1.png'),
-              label: 'Se réveiller'
-            }, {
-              image: require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 7.png'),
-              label: 'Déjeuner'
-            }, {
-              image: require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 3.png'),
-              label: 'Faire sa toilette'
-            }, {
-              image: require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 5.png'),
-              label: 'S’habiller'
-            }].map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.card}
-                onPress={() => handleCardPress(item.image, item.label)}
-              >
-                <Image source={item.image} style={styles.cardIcon} />
-                <Text style={styles.cardLabel}>{item.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-
-          <TouchableOpacity style={styles.saveButton}>
-            <Text style={styles.saveButtonText}>Enregistrer</Text>
-          </TouchableOpacity>
         </ScrollView>
+
+        {/* 菜单弹窗 */}
+        {menuVisible && <PopupMenu onClose={() => setMenuVisible(false)} />}
+
+        {/* 底部导航栏 */}
+        <BottomTabBar ageGroup="3-5" />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -119,104 +85,89 @@ const styles = StyleSheet.create({
   },
   scroll: {
     paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingBottom: 100,
   },
   headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingTop: Platform.OS === 'web' ? 5 : 20,
     height: 70,
-    paddingHorizontal: 10,
-  },
-  backButton: {
-    paddingRight: 10,
-  },
-  backIcon: {
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
-  },
-  headerCenter: {
-    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
+    paddingTop: Platform.OS === 'web' ? 10 : 20,
   },
   centeredTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#929292',
+    color: '#2F7C8D',
   },
-  dateText: {
+  menuButton: {
+    position: 'absolute',
+    right: 15,
+    top: Platform.OS === 'web' ? 10 : 20,
+    padding: 5,
+  },
+  addEventBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+    marginBottom: 14,
+  },
+  addEventText: {
+    color: '#388AA8',
+    fontSize: 16,
+  },
+  monthTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#E6770F',
+    marginBottom: 10,
+  },
+  calendar: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    borderWidth: 1,
+    borderColor: '#388AA8',
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  calendarCell: {
+    width: '14.28%', // 7列
+    aspectRatio: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#388AA8',
+    borderWidth: 0.5,
+  },
+  calendarText: {
+    color: '#388AA8',
+    fontWeight: '600',
+  },
+  selectedDate: {
     fontSize: 18,
     color: '#E6770F',
     fontWeight: 'bold',
-    marginTop: 16,
     marginBottom: 10,
   },
-  table: {
+  scheduleRow: {
+    flexDirection: 'row',
     borderWidth: 1,
-    borderColor: '#000',
-    borderRadius: 12,
+    borderColor: '#388AA8',
+    borderRadius: 10,
     overflow: 'hidden',
-    marginBottom: 20,
   },
-  tableRow: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#000',
-    backgroundColor: '#fff',
-  },
-  leftCell: {
-    width: 70,
-    height: 70,
+  scheduleBlock: {
+    width: '20%',
+    paddingVertical: 10,
     alignItems: 'center',
-    justifyContent: 'center',
     borderRightWidth: 1,
-    borderColor: '#000',
+    borderColor: '#388AA8',
   },
-  rightCell: {
-    flex: 1,
-    height: 70,
-    justifyContent: 'center',
-  },
-  icon: {
-    width: 70,
-    height: 70,
-    resizeMode: 'contain',
-  },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  card: {
-    width: '47%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 12,
-  },
-  cardIcon: {
-    width: 145,
-    height: 145,
-    borderRadius: 12,
-    resizeMode: 'contain',
-  },
-  cardLabel: {
-    marginTop: 8,
-    color: '#000',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  saveButton: {
-    backgroundColor: '#388AA8',
-    borderRadius: 30,
-    paddingVertical: 12,
-    paddingHorizontal: 60,
-    alignSelf: 'center',
-  },
-  saveButtonText: {
-    color: 'white',
-    fontSize: 18,
+  hourText: {
+    fontSize: 14,
+    color: '#388AA8',
     fontWeight: 'bold',
+  },
+  eventText: {
+    fontSize: 13,
+    color: '#388AA8',
   },
 });

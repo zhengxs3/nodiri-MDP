@@ -8,22 +8,22 @@ export default function BottomTabBar() {
   // 每个 tab 的信息（路径、默认图、选中图）
   const tabs = [
     {
-      path: '/login/3-5/routine',
-      iconDefault: require('@/assets/images/img0routine0.png'),
-      iconActive: require('@/assets/images/img0routine1.png'),
+      path: '/login/11-14/routine',
+      iconDefault: require('@/assets/images/img0agenda0.png'),
+      iconActive: require('@/assets/images/img0agenda1.png'),
     },
     {
-      path: '/login/3-5/boiteOutils',
-      iconDefault: require('@/assets/images/img0boiteOutils0.png'),
-      iconActive: require('@/assets/images/img0boiteOutils1.png'),
+      path: '/login/11-14/boiteOutils',
+      iconDefault: require('@/assets/images/img0defis0.png'),
+      iconActive: require('@/assets/images/img0defis1.png'),
     },
     {
-      path: '/login/3-5/accueil',
+      path: '/login/11-14/accueil',
       iconDefault: require('@/assets/images/img0accueil0.png'),
       iconActive: require('@/assets/images/img0accueil1.png'),
     },
     {
-      path: '/login/3-5/apprentissage',
+      path: '/login/11-14/apprentissage',
       iconDefault: require('@/assets/images/img0apprentissage0.png'),
       iconActive: require('@/assets/images/img0apprentissage1.png'),
     },
