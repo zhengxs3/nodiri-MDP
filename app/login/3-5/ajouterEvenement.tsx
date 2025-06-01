@@ -11,6 +11,11 @@ import {
   View,
 } from 'react-native';
 
+const jours = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+const mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+const today = new Date();
+const dateFormatted = `${jours[today.getDay()]} ${today.getDate()} ${mois[today.getMonth()]}`;
+
 export default function HomeScreen() {
   const router = useRouter();
   const [menuVisible, setMenuVisible] = useState(false);
@@ -38,7 +43,7 @@ export default function HomeScreen() {
         {/* ✅ 单一 ScrollView 包含所有内容 */}
         <ScrollView contentContainerStyle={styles.scroll}>
           {/* 日期标题 */}
-          <Text style={styles.dateText}>Mardi 2 Avril</Text>
+          <Text style={styles.dateText}>{dateFormatted}</Text>
 
           {/* Routine 表格 */}
           <View style={styles.table}>
@@ -117,7 +122,7 @@ const styles = StyleSheet.create({
   centeredTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#929292', // 标题颜色来自截图
+    color: '#929292',
   },
   dateText: {
     fontSize: 18,
@@ -176,7 +181,7 @@ const styles = StyleSheet.create({
   },
   cardLabel: {
     marginTop: 8,
-    color: '#000', // ✅ 黑色字体，确保可见
+    color: '#000',
     fontSize: 16,
     textAlign: 'center',
   },

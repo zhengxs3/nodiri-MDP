@@ -34,7 +34,7 @@ export default function RegisterScreen() {
 
     console.log({ name, password });
     showAlert('Succès', 'Connexion réussie !');
-    router.replace('/login/3-5/accueil');
+    router.replace('/login/choix');
   };
 
   return (
