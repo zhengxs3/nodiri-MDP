@@ -28,7 +28,7 @@ export default function BottomTabBar() {
       iconActive: require('@/assets/images/img0apprentissage1.png'),
     },
     {
-      path: '/login/3-5/messages',
+      path: '/login/codeparental',
       iconDefault: require('@/assets/images/img0messages0.png'),
       iconActive: require('@/assets/images/img0messages1.png'),
     },
