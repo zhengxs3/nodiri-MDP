@@ -37,11 +37,11 @@ export default function HomeScreen() {
             <Text style={styles.saveButtonText}>3-5 ans</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.saveButton} onPress={() => router.push('/6-10')}>
+          <TouchableOpacity style={styles.saveButton} onPress={() => router.push('/login/6-10/accueil')}>
             <Text style={styles.saveButtonText}>6-10 ans</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.saveButton} onPress={() => router.push('/11-14')}>
+          <TouchableOpacity style={styles.saveButton} onPress={() => router.push('/login/11-14/accueil')}>
             <Text style={styles.saveButtonText}>11-14 ans</Text>
           </TouchableOpacity>
 
@@ -50,7 +50,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.saveButton} onPress={() => router.push('/parents')}>
-            <Text style={styles.saveButtonText}>Parents</Text>
+            <Text style={styles.saveButtonText}>Professionnel</Text>
           </TouchableOpacity>
         </ScrollView>
       </View>
