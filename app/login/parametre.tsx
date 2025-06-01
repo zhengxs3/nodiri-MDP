@@ -149,7 +149,7 @@ export default function SettingsScreen() {
                         : styles.toggleTextInactive,
                     ]}
                   >
-                    {val ? 'Activder' : 'Désactiver'}
+                    {val ? 'Activer' : 'Désactiver'}
                   </Text>
                 </TouchableOpacity>
               ))}
