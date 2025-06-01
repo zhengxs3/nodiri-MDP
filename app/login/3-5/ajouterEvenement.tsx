@@ -19,68 +19,77 @@ const dateFormatted = `${jours[today.getDay()]} ${today.getDate()} ${mois[today.
 export default function HomeScreen() {
   const router = useRouter();
   const [menuVisible, setMenuVisible] = useState(false);
+  const [selectedCards, setSelectedCards] = useState([null, null, null, null]);
 
   const handleOutsidePress = () => {
     if (menuVisible) setMenuVisible(false);
   };
 
+  const handleCardPress = (image, label) => {
+    const nextIndex = selectedCards.findIndex((c) => c === null);
+    if (nextIndex === -1) return;
+    const updated = [...selectedCards];
+    updated[nextIndex] = { image, label };
+    setSelectedCards(updated);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={handleOutsidePress}>
       <View style={styles.wrapper}>
-        {/* 🔼 Header */}
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Image
-              source={require('@/assets/images/left.png')}
-              style={styles.backIcon}
-            />
+            <Image source={require('@/assets/images/left.png')} style={styles.backIcon} />
           </TouchableOpacity>
           <View style={styles.headerCenter}>
             <Text style={styles.centeredTitle}>Ajouter un évènement</Text>
           </View>
         </View>
 
-        {/* ✅ 单一 ScrollView 包含所有内容 */}
         <ScrollView contentContainerStyle={styles.scroll}>
-          {/* 日期标题 */}
           <Text style={styles.dateText}>{dateFormatted}</Text>
 
-          {/* Routine 表格 */}
           <View style={styles.table}>
-            {[
-              require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 1.png'),
-              require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 7.png'),
-              require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 3.png'),
-              require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 5.png'),
-            ].map((source, index) => (
+            {Array.from({ length: 4 }).map((_, index) => (
               <View key={index} style={styles.tableRow}>
                 <View style={styles.leftCell}>
-                  <Image source={source} style={styles.icon} />
+                  {selectedCards[index] && (
+                    <Image source={selectedCards[index].image} style={styles.icon} />
+                  )}
                 </View>
-                <View style={styles.rightCell} />
+                <View style={styles.rightCell}>
+                  {selectedCards[index] && (
+                    <Text style={{ padding: 10 }}>{selectedCards[index].label}</Text>
+                  )}
+                </View>
               </View>
             ))}
           </View>
 
-          {/* Routine 卡片 */}
           <View style={styles.grid}>
-            <TouchableOpacity style={styles.card}>
-              <Image
-                source={require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 1.png')}
-                style={styles.cardIcon}
-              />
-              <Text style={styles.cardLabel}>Se réveiller</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
-              <Image
-                source={require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 7.png')}
-                style={styles.cardIcon}
-              />
-              <Text style={styles.cardLabel}>Déjeuner</Text>
-            </TouchableOpacity>
+            {[{
+              image: require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 1.png'),
+              label: 'Se réveiller'
+            }, {
+              image: require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 7.png'),
+              label: 'Déjeuner'
+            }, {
+              image: require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 3.png'),
+              label: 'Faire sa toilette'
+            }, {
+              image: require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 5.png'),
+              label: 'S’habiller'
+            }].map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.card}
+                onPress={() => handleCardPress(item.image, item.label)}
+              >
+                <Image source={item.image} style={styles.cardIcon} />
+                <Text style={styles.cardLabel}>{item.label}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
 
-          {/* ✅ Enregistrer 按钮 */}
           <TouchableOpacity style={styles.saveButton}>
             <Text style={styles.saveButtonText}>Enregistrer</Text>
           </TouchableOpacity>
@@ -155,6 +164,7 @@ const styles = StyleSheet.create({
   rightCell: {
     flex: 1,
     height: 70,
+    justifyContent: 'center',
   },
   icon: {
     width: 70,

@@ -2,10 +2,12 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   Image,
+  Modal,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View
@@ -14,6 +16,14 @@ import {
 export default function HomeScreen() {
   const router = useRouter();
   const [menuVisible, setMenuVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newMessage, setNewMessage] = useState('');
+  const [conversations, setConversations] = useState([
+    { id: 1, title: 'Conversation 1', text: 'Bonjour, ça va ?' },
+    { id: 2, title: 'Conversation 2', text: 'Tu as mangé ?' },
+    { id: 3, title: 'Conversation 3', text: 'On se voit demain ?' },
+    { id: 4, title: 'Conversation 4', text: 'C’est un beau jour !' },
+  ]);
 
   const handleOutsidePress = () => {
     if (menuVisible) setMenuVisible(false);
@@ -39,29 +49,73 @@ export default function HomeScreen() {
         {/* 🔽 内容区域 */}
         <ScrollView contentContainerStyle={styles.scroll}>
           {/* 添加新对话按钮 */}
-          <TouchableOpacity style={styles.addEventBtn} onPress={() => router.push('/login/ajouterMessage')}>
+          <TouchableOpacity
+            style={styles.addEventBtn}
+            onPress={() => setModalVisible(true)}
+          >
             <Image source={require('@/assets/images/plus.png')} style={{ width: 18, height: 19, marginRight: 8 }} />
             <Text style={styles.addEventText}>Démarrer une conversation</Text>
           </TouchableOpacity>
 
           {/* Conversation 列表 */}
           <View style={styles.conversationList}>
-            {[1, 2, 3, 4].map((num) => (
+            {conversations.map((item) => (
               <TouchableOpacity
-                key={num}
+                key={item.id}
                 style={styles.conversationCard}
-                onPress={() => router.push(`/login/conversation/${num}`)}
+                onPress={() => router.push(`/login/conversation/${item.id}`)}
               >
-                <Text style={styles.conversationTitle}>Conversation {num}</Text>
-                <Text style={styles.conversationText}>
-                  blablablablablabla blablablablablabla blablablablablabla
-                </Text>
+                <Text style={styles.conversationTitle}>{item.title}</Text>
+                <Text style={styles.conversationText}>{item.text}</Text>
                 <Text style={styles.arrow}>{'>'}</Text>
               </TouchableOpacity>
             ))}
           </View>
-
         </ScrollView>
+
+        {/* 🔽 弹窗 Modal */}
+        <Modal
+          visible={modalVisible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={{ fontSize: 18, marginBottom: 10 }}>Nouvelle conversation</Text>
+              <TextInput
+                placeholder="Écrivez ici..."
+                style={styles.input}
+                value={newMessage}
+                onChangeText={setNewMessage}
+              />
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 10 }}>
+                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                  <Text style={{ color: 'gray' }}>Annuler</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (newMessage.trim()) {
+                      const newId = conversations.length + 1;
+                      setConversations([
+                        ...conversations,
+                        {
+                          id: newId,
+                          title: `Conversation ${newId}`,
+                          text: newMessage,
+                        }
+                      ]);
+                      setNewMessage('');
+                      setModalVisible(false);
+                    }
+                  }}
+                >
+                  <Text style={{ color: '#388AA8', fontWeight: 'bold' }}>Ajouter</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
 
         {/* ✅ popupMenu 放在 ScrollView 外部，固定右上角 */}
         {menuVisible && (
@@ -224,5 +278,24 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     resizeMode: 'contain',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 12,
+    width: '80%',
+  },
+  input: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 15,
   },
 });
