@@ -21,6 +21,7 @@ const profileRoutes = require("./routes/profile.routes");
 const adminRoutes = require("./routes/admin.routes");
 const challengeRoutes = require("./routes/challenges.routes");
 const userChallengeRoutes = require("./routes/userChallenges.routes");
+const routinePictogramRoutes = require('./routes/routinePictogramRoutes');
 
 
 
@@ -33,7 +34,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes auth (/api/login)
-app.use("/api", authRoutes); 
+app.use("/api/auth", authRoutes); 
 
 // Routes rôles 
 app.use("/api", profileRoutes);
@@ -46,6 +47,9 @@ app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes);
 // Routes Routines
 app.use("/api/routines", routineRoutes);
+//Routes routinepictogram
+app.use('/api/routine-pictogram', routinePictogramRoutes);
+
 // Routes Emotions
 app.use("/api/emotions", emotionRoutes);
 // Routes UserEmotion

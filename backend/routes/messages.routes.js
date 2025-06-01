@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require("express"); 
 const router = express.Router();
 const { getAllMessages, getMessageById, createMessage, deleteMessage } = require("../controllers/messages.controller");
 const authenticateToken = require("../middleware/authenticateToken");
