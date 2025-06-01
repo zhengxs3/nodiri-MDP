@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 30, 2025 at 09:57 PM
+-- Generation Time: Jun 01, 2025 at 09:47 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.3.6
 
@@ -264,6 +264,22 @@ CREATE TABLE IF NOT EXISTS `routine_events` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `routine_pictogram`
+--
+
+DROP TABLE IF EXISTS `routine_pictogram`;
+CREATE TABLE IF NOT EXISTS `routine_pictogram` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `routine_id` int NOT NULL,
+  `pictogram_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `routine_id` (`routine_id`),
+  KEY `pictogram_id` (`pictogram_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -278,14 +294,24 @@ CREATE TABLE IF NOT EXISTS `users` (
   `parent_code` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `birthdate`, `parent_code`) VALUES
-(1, 'jane_doe', 'jane@example.com', '$2b$10$kZaqi/0X7Chqi.UzNmSNx.PbP.Si2GMidGjvKJPaR9dNVMYv2gtTm', 'parent', '2000-04-12', NULL);
+(1, 'jane_doe', 'jane@example.com', '$2b$10$kZaqi/0X7Chqi.UzNmSNx.PbP.Si2GMidGjvKJPaR9dNVMYv2gtTm', 'parent', '2000-04-12', NULL),
+(2, 'lucas2025', 'lucas@example.com', '$2b$10$Gg6NIt0EKcwNkLgxzZUrx.mi.Mwh23JaZE2jErxp51VXkIebpwMfO', 'parent', '1985-08-20', NULL),
+(5, 'lucas20255', 'lucass@example.com', '$2b$10$vx5UjyGWPY9BeEBlcJqwiuX2TktDgtnJZ1D72rct6IJtd4uMH0kfS', 'parent', '1985-08-20', NULL),
+(6, 'Abir', 'Abir@gmail.com', '$2b$10$EhUFqaoolna1NukOm2OtOe.ppCqgpTF2iN9XN3qJxxhqW3QQNHrPu', 'parent', '1985-08-20', '5ZLCHB'),
+(7, 'Lina', 'lina.kid@example.com', '$2b$10$i16mOnip2ZhyB0mNkH5.DO0sPxUTLZCdsMD0SY/MaYitlrByj2HdK', 'child', '2014-05-12', '5ZLCHB'),
+(8, 'Linaaa', 'linaa.kid@example.com', '$2b$10$CwUlJ8xD8u1jnPbiOBfzPuNnF1zhER6jHW7FIRSECIzSJ7jLM75sa', 'child', '2020-05-12', '5ZLCHB'),
+(9, 'Linaaaa', 'linaaa.kid@example.com', '$2b$10$s7BJTUHk.OmkSy41EEeBouSOaKIF8vzF7f8pHDq.AQ/zd18dfI1e2', 'child', '2020-05-12', '5ZLCHB'),
+(10, 'Linaaaaa', 'linaaaa.kid@example.com', '$2b$10$RHksS/lL0i2aRGXxluS2V.Jd6oJb5Bn6KIlajLpKWZprNtw5pTNXK', 'child', '2020-05-12', '5ZLCHB'),
+(11, 'Linaaaaaa', 'linaaaaa.kid@example.com', '$2b$10$u/MjpLAlPxsfkIY7SiWvLOTwa5b4LyE1m4hDtWv8Me863fAu2/xHC', 'child', '2020-05-12', '5ZLCHB'),
+(12, 'LinaAaaaaa', 'linaaAaaa.kid@example.com', '$2b$10$LWmP7qAVwS1hdd6fXeL9puM7Vg40QCVwufZj9gzT3FJMCg5jIpJDm', 'child', '2020-05-12', '1234'),
+(13, 'LinaaAaaaaa', 'linaAaAaaa.kid@example.com', '$2b$10$G2g.O5SZDevmq9/LDjoX9.YnfHWeGt5Dfxq6CwRxA8n4emG8POSQe', 'child', '2020-05-12', '');
 
 -- --------------------------------------------------------
 
@@ -418,6 +444,13 @@ ALTER TABLE `routines`
 ALTER TABLE `routine_events`
   ADD CONSTRAINT `routine_events_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `routine_events_ibfk_2` FOREIGN KEY (`pictogram_id`) REFERENCES `pictograms` (`id`);
+
+--
+-- Constraints for table `routine_pictogram`
+--
+ALTER TABLE `routine_pictogram`
+  ADD CONSTRAINT `routine_pictogram_ibfk_1` FOREIGN KEY (`routine_id`) REFERENCES `routines` (`id`),
+  ADD CONSTRAINT `routine_pictogram_ibfk_2` FOREIGN KEY (`pictogram_id`) REFERENCES `pictograms` (`id`);
 
 --
 -- Constraints for table `user_challenges`
