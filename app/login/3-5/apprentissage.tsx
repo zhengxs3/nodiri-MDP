@@ -3,7 +3,6 @@ import { useState } from 'react';
 import {
   Image,
   Platform,
-  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,6 +10,8 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
+import PopupMenu from '../PopupMenu';
+import BottomTabBar from './BottomTabBar';
 
 
 export default function HomeScreen() {
@@ -193,89 +194,42 @@ export default function HomeScreen() {
             <Text style={styles.sectionTitle}>Livre</Text>
           </TouchableOpacity>
           <View style={styles.grid}>
-<TouchableOpacity
-  style={styles.card}
-  onPress={() => {
-    const pdfPreviewUrl =
-      'https://drive.google.com/file/d/1L65CW7MeyNSiiRhQGSQ34BHiA_-zzRIF/preview';
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() => {
+                const pdfPreviewUrl =
+                  'https://drive.google.com/file/d/1L65CW7MeyNSiiRhQGSQ34BHiA_-zzRIF/preview';
 
-    if (Platform.OS === 'web') {
-      window.open(pdfPreviewUrl, '_blank');
-    } else {
-      router.push({
-        pathname: '/login/pdfViewer',
-        params: {
-          pdfUri: pdfPreviewUrl,
-        },
-      });
-    }
-  }}
->
-
-
-  <Image
-    source={require('@/assets/images/imgAppliNodiri/mockup couverture simon.png')}
-    style={styles.icon}
-  />
-  <Text style={styles.cardLabel}>mockup couverture simon</Text>
-</TouchableOpacity>
-
-
-           
+                if (Platform.OS === 'web') {
+                  window.open(pdfPreviewUrl, '_blank');
+                } else {
+                  router.push({
+                    pathname: '/login/pdfViewer',
+                    params: {
+                      pdfUri: pdfPreviewUrl,
+                    },
+                  });
+                }
+              }}
+            >
+              <Image
+                source={require('@/assets/images/imgAppliNodiri/mockup couverture simon.png')}
+                style={styles.icon}
+              />
+              <Text style={styles.cardLabel}>mockup couverture simon</Text>
+            </TouchableOpacity>
+            
           </View>
 
         </ScrollView>
 
-        {/* ✅ popupMenu 放在 ScrollView 外部，固定在右上角 */}
+        {/* Menu déroulant */}
         {menuVisible && (
-          <View
-            style={styles.popupMenu}
-            onStartShouldSetResponder={() => true}
-          >
-            <TouchableOpacity onPress={() => router.push('/login/aide')}>
-              <Text style={styles.menuItem}>Aide</Text>
-            </TouchableOpacity>
-            <View style={styles.menuSeparator} />
-            <TouchableOpacity onPress={() => router.push('/login/parametre')}>
-              <Text style={styles.menuItem}>Paramètres</Text>
-            </TouchableOpacity>
-            <View style={styles.menuSeparator} />
-            <TouchableOpacity
-              onPress={() => {
-                setMenuVisible(false);
-                router.replace('/');
-              }}
-            >
-              <Text style={[styles.menuItem, { color: '#E07A1F', fontWeight: 'bold' }]}>
-                Se déconnecter
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <PopupMenu onClose={() => setMenuVisible(false)} />
         )}
 
-        {/* 🔽 底部导航栏 */}
-        <View style={styles.tabBar}>
-          <TouchableOpacity onPress={() => router.push('/login/3-5/routine')}>
-            <Image source={require('@/assets/images/img0routine0.png')} style={styles.tabIcon} />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.push('/login/3-5/boiteOutils')}>
-            <Image source={require('@/assets/images/img0boiteOutils0.png')} style={styles.tabIcon} />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.push('/login/3-5/accueil')}>
-            <Image source={require('@/assets/images/img0accueil0.png')} style={styles.tabIcon} />
-          </TouchableOpacity>
-          
-          <TouchableOpacity onPress={() => router.push('/login/3-5/apprentissage')}>
-            <Image source={require('@/assets/images/img0apprentissage1.png')} style={styles.tabIcon} />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.push('/login/messages')}>
-            <Image source={require('@/assets/images/img0messages0.png')} style={styles.tabIcon} />
-          </TouchableOpacity>
-
-        </View>
+        {/* Bottom navigation */}
+        <BottomTabBar />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -309,32 +263,6 @@ const styles = StyleSheet.create({
     top: 20,
     padding: 5,
   },
-  popupMenu: {
-    position: 'absolute',
-    top: 60,
-    right: 10,
-    backgroundColor: 'white',
-    borderColor: '#000',
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    zIndex: 1000,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  menuItem: {
-    fontSize: 16,
-    paddingVertical: 4,
-  },
-  menuSeparator: {
-    height: 1,
-    backgroundColor: '#ccc',
-    marginVertical: 4,
-  },
   sectionTitle: {
     fontSize: 24,
     textAlign: 'center',
@@ -365,22 +293,5 @@ const styles = StyleSheet.create({
     color: 'fff',
     fontSize: 16,
     textAlign: 'center',
-  },
-  tabBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderWidth: 1,
-    borderColor: '#2F7C8D',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    marginHorizontal: 10,
-    marginBottom: 10,
-  },
-  tabIcon: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
   },
 });

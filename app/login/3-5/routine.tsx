@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router'; 
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   Image,
@@ -10,6 +10,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import PopupMenu from '../PopupMenu';
+import BottomTabBar from './BottomTabBar';
 
 const jours = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
 const mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
@@ -65,45 +67,12 @@ export default function HomeScreen() {
 
         {/* Menu déroulant */}
         {menuVisible && (
-          <View style={styles.popupMenu} onStartShouldSetResponder={() => true}>
-            <TouchableOpacity onPress={() => router.push('/login/aide')}>
-              <Text style={styles.menuItem}>Aide</Text>
-            </TouchableOpacity>
-            <View style={styles.menuSeparator} />
-            <TouchableOpacity onPress={() => router.push('/login/parametre')}>
-              <Text style={styles.menuItem}>Paramètres</Text>
-            </TouchableOpacity>
-            <View style={styles.menuSeparator} />
-            <TouchableOpacity onPress={() => { setMenuVisible(false); router.replace('/'); }}>
-              <Text style={[styles.menuItem, { color: '#E07A1F', fontWeight: 'bold' }]}>
-                Se déconnecter
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <PopupMenu onClose={() => setMenuVisible(false)} />
         )}
 
         {/* Bottom navigation */}
-        <View style={styles.tabBar}>
-          <TouchableOpacity onPress={() => router.push('/login/3-5/routine')}>
-            <Image source={require('@/assets/images/img0routine1.png')} style={styles.tabIcon} />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.push('/login/3-5/boiteOutils')}>
-            <Image source={require('@/assets/images/img0boiteOutils0.png')} style={styles.tabIcon} />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.push('/login/3-5/accueil')}>
-            <Image source={require('@/assets/images/img0accueil0.png')} style={styles.tabIcon} />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.push('/login/3-5/apprentissage')}>
-            <Image source={require('@/assets/images/img0apprentissage0.png')} style={styles.tabIcon} />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.push('/login/messages')}>
-            <Image source={require('@/assets/images/img0messages0.png')} style={styles.tabIcon} />
-          </TouchableOpacity>
-        </View>
+        <BottomTabBar />
+        
       </View>
     </TouchableWithoutFeedback>
   );
@@ -179,49 +148,6 @@ const styles = StyleSheet.create({
   icon: {
     width: 70,
     height: 70,
-    resizeMode: 'contain',
-  },
-  popupMenu: {
-    position: 'absolute',
-    top: 60,
-    right: 10,
-    backgroundColor: 'white',
-    borderColor: '#000',
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    zIndex: 1000,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  menuItem: {
-    fontSize: 16,
-    paddingVertical: 4,
-  },
-  menuSeparator: {
-    height: 1,
-    backgroundColor: '#ccc',
-    marginVertical: 4,
-  },
-  tabBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderWidth: 1,
-    borderColor: '#388AA8',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    marginHorizontal: 10,
-    marginBottom: 10,
-  },
-  tabIcon: {
-    width: 30,
-    height: 30,
     resizeMode: 'contain',
   },
 });
