@@ -216,7 +216,7 @@ export default function HomeScreen() {
                 source={require('@/assets/images/imgAppliNodiri/mockup couverture simon.png')}
                 style={styles.icon}
               />
-              <Text style={styles.cardLabel}>mockup couverture simon</Text>
+              <Text style={styles.cardLabel}>Simon</Text>
             </TouchableOpacity>
             
           </View>
