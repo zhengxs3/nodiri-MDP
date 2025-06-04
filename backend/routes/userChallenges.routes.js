@@ -5,7 +5,7 @@ const {
   assignChallengeToUser,
   markChallengeComplete
 } = require("../controllers/userChallenges.controller");
-const authenticateToken = require("../middleware/authenticateToken");
+const authenticateToken = require("../middlewares/authenticateToken");
 
 router.get("/:userId", authenticateToken, getUserChallenges);
 router.post("/", authenticateToken, assignChallengeToUser);

@@ -1,4 +1,5 @@
 import SimpleSelect from '@/components/SimpleSelect';
+import { API_URL } from '@/constants/api';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
@@ -28,7 +29,7 @@ export default function RegisterScreen() {
 
   const [name, setName] = useState('');
   const [role, setRole] = useState('');
-  const [birthDateText, setBirthDateText] = useState(''); // format YYYY-MM-DD
+  const [birthDateText, setBirthDateText] = useState('');
   const [birthDate, setBirthDate] = useState<Date | undefined>();
   const [showPicker, setShowPicker] = useState(false);
   const [email, setEmail] = useState('');
@@ -41,14 +42,7 @@ export default function RegisterScreen() {
         ? birthDateText
         : birthDate?.toISOString().split('T')[0];
 
-    if (
-      !name ||
-      !role ||
-      !birthValue ||
-      !email ||
-      !password ||
-      !confirmPassword
-    ) {
+    if (!name || !role || !birthValue || !email || !password || !confirmPassword) {
       showAlert('Champs obligatoires', 'Veuillez remplir tous les champs obligatoires.');
       return;
     }
@@ -58,8 +52,36 @@ export default function RegisterScreen() {
       return;
     }
 
-    showAlert('Succès', 'Inscription réussie !');
-    router.replace('/register/paiment');
+    try {
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: name,
+          email,
+          password,
+          role: role.toLowerCase(),
+          birthdate: birthValue,
+          parent_code: '',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log('❌ Erreurs:', data);
+        showAlert('Erreur', data.errors?.join('\n') || data.message || 'Erreur inconnue');
+        return;
+      }
+
+      showAlert('Succès', 'Inscription réussie !');
+      router.replace('/register/paiment');
+    } catch (error: any) {
+      console.error('Erreur lors de l’inscription', error);
+      showAlert('Erreur', 'Une erreur est survenue. Vérifiez votre connexion.');
+    }
   };
 
   return (
@@ -72,13 +94,11 @@ export default function RegisterScreen() {
           <Image source={require('@/assets/images/logo.png')} style={styles.logo} />
           <Text style={styles.title}>Inscription</Text>
 
-          {/* Nom */}
           <View style={styles.field}>
             <Text style={styles.label}>Nom complet *</Text>
             <TextInput style={styles.input} value={name} onChangeText={setName} />
           </View>
 
-          {/* Role */}
           <SimpleSelect
             label="Vous êtes"
             required
@@ -93,16 +113,13 @@ export default function RegisterScreen() {
             ]}
           />
 
-          {/* Date de naissance */}
           <View style={styles.field}>
             <Text style={styles.label}>Date de naissance *</Text>
             {Platform.OS === 'web' ? (
               <input
                 type="date"
                 value={birthDateText}
-                onChange={(e) => {
-                  setBirthDateText(e.target.value); // format YYYY-MM-DD
-                }}
+                onChange={(e) => setBirthDateText(e.target.value)}
                 max={new Date().toISOString().split('T')[0]}
                 style={{
                   width: '93%',
@@ -144,7 +161,6 @@ export default function RegisterScreen() {
             )}
           </View>
 
-          {/* Email */}
           <View style={styles.field}>
             <Text style={styles.label}>Email *</Text>
             <TextInput
@@ -156,7 +172,6 @@ export default function RegisterScreen() {
             />
           </View>
 
-          {/* Mot de passe */}
           <View style={styles.field}>
             <Text style={styles.label}>Mot de passe *</Text>
             <TextInput
@@ -167,7 +182,6 @@ export default function RegisterScreen() {
             />
           </View>
 
-          {/* Validation mot de passe */}
           <View style={styles.field}>
             <Text style={styles.label}>Validation du mot de passe *</Text>
             <TextInput

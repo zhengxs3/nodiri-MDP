@@ -1,29 +1,26 @@
 const express = require("express");
 const router = express.Router();
-
+const userController = require("../controllers/users.controller");
+const authenticateToken = require("../middlewares/authenticateToken");
 const {
   getAllUsers,
   getUserById,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
 } = require("../controllers/users.controller");
+const validateUser = require("../middlewares/validateUser");
 
-// Routes REST
 
-// Récupérer tous les utilisateurs
-router.get("/", getAllUsers);
+// Toutes les routes sont protégées par défaut (à adapter selon ton besoin)
+router.use(authenticateToken);
 
-// Récupérer un utilisateur par ID
-router.get("/:id", getUserById);
+router.post("/", validateUser, userController.createUser);
 
-// Créer un nouvel utilisateur
-router.post("/", createUser);
-
-// Modifier un utilisateur
-router.put("/:id", updateUser);
-
-// Supprimer un utilisateur
-router.delete("/:id", deleteUser);
+// Les autres routes
+router.get("/", userController.getAllUsers);
+router.get("/:id", userController.getUserById);
+router.put("/:id", userController.updateUser);
+router.delete("/:id", userController.deleteUser);
 
 module.exports = router;

@@ -4,19 +4,21 @@ import {
   useFonts,
 } from '@expo-google-fonts/poppins';
 import Slider from '@react-native-community/slider';
-import AppLoading from 'expo-app-loading';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
+import { useCallback, useState } from 'react';
+
 import {
   Image,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
+
+SplashScreen.preventAutoHideAsync();
 
 function SettingsSection({ title, children, large = true }) {
   const [expanded, setExpanded] = useState(true);
@@ -75,12 +77,16 @@ export default function SettingsScreen() {
     Poppins_600SemiBold,
   });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
 
   return (
-    <View style={styles.wrapper}>
+    <View style={styles.wrapper} onLayout={onLayoutRootView}>
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Image source={require('@/assets/images/left.png')} style={styles.backIcon} />
@@ -297,41 +303,38 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
+  // Exemple de styles existants (remplace ou ajoute ceux que tu avais déjà)
   wrapper: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingBottom: Platform.OS === 'web' ? 0 : 45,
+    paddingHorizontal: 16,
+    paddingTop: 40,
   },
   scroll: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingBottom: 40,
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: Platform.OS === 'web' ? 5 : 20,
-    height: 70,
-    paddingHorizontal: 10,
+    marginBottom: 20,
   },
   backButton: {
-    paddingRight: 10,
+    padding: 8,
   },
   backIcon: {
     width: 24,
     height: 24,
-    resizeMode: 'contain',
   },
   headerCenter: {
     flex: 1,
     alignItems: 'center',
   },
   centeredTitle: {
-    fontSize: 24,
-    fontFamily: 'Poppins_600SemiBold',
-    color: '#388AA8',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   section: {
-    marginBottom: 20,
+    marginBottom: 24,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -339,105 +342,110 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sectionTitle: {
-    fontSize: 20,
-    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 18,
+    fontWeight: '600',
   },
   arrowIcon: {
     width: 20,
     height: 20,
+    transform: [{ rotate: '0deg' }],
   },
   iconCollapsed: {
-    transform: [{ rotate: '180deg' }],
+    transform: [{ rotate: '-90deg' }],
   },
   subSection: {
-    marginBottom: 0,
+    marginTop: 12,
+    marginBottom: 12,
+    paddingLeft: 10,
   },
   subHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  label: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
   smallArrow: {
     width: 16,
     height: 16,
   },
-  label: {
-    fontSize: 16,
-    fontFamily: 'Poppins_400Regular',
-    marginBottom: 5,
-    marginTop: 5,
-  },
-  forgotPassword: {
-    color: '#A4A4A4',
-    fontSize: 12,
-    marginBottom: 6,
-    marginLeft: 4,
-    fontFamily: 'Poppins_400Regular',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#CCC',
-    borderRadius: 8,
-    padding: 8,
-    marginBottom: 5,
-    fontFamily: 'Poppins_400Regular',
-  },
   toggleRow: {
     flexDirection: 'row',
-    gap: 10,
+    justifyContent: 'space-around',
+    marginTop: 10,
   },
   toggleButton: {
-    paddingVertical: 2,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: '#388AA8',
-    backgroundColor: 'transparent',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
   toggleActive: {
     backgroundColor: '#388AA8',
   },
   toggleText: {
     fontSize: 14,
-    fontFamily: 'Poppins_400Regular',
   },
   toggleTextActive: {
     color: '#fff',
+    fontWeight: 'bold',
   },
   toggleTextInactive: {
-    color: '#388AA8',
+    color: '#000',
+  },
+  sliderContainer: {
+    marginTop: 10,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+  },
+  slider: {
+    width: '100%',
+    height: 40,
+  },
+  input: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginVertical: 8,
+  },
+  forgotPassword: {
+    color: '#007f7f',
+    fontSize: 13,
+    marginBottom: 8,
+    textAlign: 'right',
   },
   saveSubButton: {
     backgroundColor: '#388AA8',
-    borderRadius: 20,
-    paddingVertical: 6,
-    paddingHorizontal: 20,
-    alignSelf: 'flex-start',
-    marginBottom: 14,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+    alignSelf: 'flex-end',
+    marginTop: 10,
   },
   saveSubButtonText: {
-    color: 'white',
+    color: '#fff',
+    fontSize: 14,
     fontWeight: 'bold',
-    fontFamily: 'Poppins_400Regular',
   },
   saveButton: {
-    backgroundColor: '#388AA8',
-    borderRadius: 30,
+    backgroundColor: '#007f7f',
     paddingVertical: 12,
-    paddingHorizontal: 60,
+    paddingHorizontal: 24,
+    borderRadius: 8,
     alignSelf: 'center',
-    marginTop: 20,
+    marginVertical: 20,
   },
   saveButtonText: {
-    color: 'white',
-    fontSize: 18,
-    fontFamily: 'Poppins_600SemiBold',
-  },
-  sliderContainer: {
-    width: '100%',
-  },
-  slider: {
-    width: '90%',
-    height: 10,
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
+

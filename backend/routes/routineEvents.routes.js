@@ -5,7 +5,7 @@ const {
   addRoutineEvent,
   deleteRoutineEvent
 } = require("../controllers/routineEvents.controller");
-const authenticateToken = require("../middleware/authenticateToken");
+const authenticateToken = require("../middlewares/authenticateToken");
 
 // Récupérer tous les pictos d'un utilisateur pour une date donnée
 router.get("/:userId", authenticateToken, getRoutineEventsByUserAndDate);

@@ -4,6 +4,15 @@ const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 dotenv.config();
 
+function generateParentCode(length = 6) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let code = '';
+  for (let i = 0; i < length; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+}
+
 // Fonction utilitaire pour calculer l’âge
 function getAgeFromBirthdate(birthdate) {
   const birth = new Date(birthdate);
@@ -21,30 +30,41 @@ const register = async (req, res) => {
   const age = getAgeFromBirthdate(birthdate);
 
   const createUser = async () => {
-    const emailCheck = "SELECT * FROM users WHERE email = ?";
-    db.query(emailCheck, [email], async (err, results) => {
-      if (err) return res.status(500).json({ error: "Erreur serveur" });
-      if (results.length > 0) return res.status(400).json({ error: "Email déjà utilisé" });
+  const emailCheck = "SELECT * FROM users WHERE email = ?";
+  db.query(emailCheck, [email], async (err, results) => {
+    if (err) return res.status(500).json({ error: "Erreur serveur" });
+    if (results.length > 0) return res.status(400).json({ error: "Email déjà utilisé" });
 
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const sql = "INSERT INTO users (username, email, password, role, birthdate, parent_code) VALUES (?, ?, ?, ?, ?, ?)";
-      db.query(sql, [username, email, hashedPassword, role, birthdate, parent_code || null], (err, result) => {
-        if (err) return res.status(500).json({ error: "Erreur lors de la création de l'utilisateur" });
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        const token = jwt.sign(
-          { id: result.insertId, role },
-          process.env.JWT_SECRET,
-          { expiresIn: "6h" }
-        );
+    // 👉 Génération du parent_code seulement si le rôle est "parent"
+    let parentCodeToInsert = null;
+    if (role === "parent") {
+      parentCodeToInsert = generateParentCode();
+    } else if (age < 15) {
+      parentCodeToInsert = parent_code || null; // pour les enfants, il faut un code parent transmis
+    }
 
-        res.status(201).json({
-          message: "Utilisateur créé",
-          userId: result.insertId,
-          token
-        });
+    const sql = "INSERT INTO users (username, email, password, role, birthdate, parent_code) VALUES (?, ?, ?, ?, ?, ?)";
+    db.query(sql, [username, email, hashedPassword, role, birthdate, parentCodeToInsert], (err, result) => {
+      if (err) return res.status(500).json({ error: "Erreur lors de la création de l'utilisateur" });
+
+      const token = jwt.sign(
+        { id: result.insertId, role },
+        process.env.JWT_SECRET,
+        { expiresIn: "6h" }
+      );
+
+      // 👉 On renvoie le code parent s’il vient d’être généré
+      res.status(201).json({
+        message: "Utilisateur créé",
+        userId: result.insertId,
+        token,
+        ...(parentCodeToInsert ? { parent_code: parentCodeToInsert } : {})
       });
     });
-  };
+  });
+};
 
   if (age < 15) {
     if (!parent_code) {
@@ -77,11 +97,13 @@ const login = (req, res) => {
     if (!passwordMatch) return res.status(401).json({ error: "Email ou mot de passe incorrect" });
 
     const age = getAgeFromBirthdate(user.birthdate);
-    if (age < 15) {
-      if (!user.parent_code || user.parent_code !== parent_code) {
-        return res.status(403).json({ error: "Code parental requis ou incorrect" });
-      }
-    }
+if (age < 15 && user.parent_code) {
+  if (!parent_code || user.parent_code !== parent_code) {
+    return res.status(403).json({ error: "Code parental requis ou incorrect" });
+  }
+}
+
+
 
     const token = jwt.sign(
       { id: user.id, role: user.role },

@@ -4,8 +4,8 @@ const {
   getAllCategories,
   createCategory
 } = require("../controllers/forumCategories.controller");
-const authenticateToken = require("../middleware/authenticateToken");
-const checkAge = require("../middleware/checkAge");
+const authenticateToken = require("../middlewares/authenticateToken");
+const checkAge = require("../middlewares/checkAge");
 
 router.get("/", authenticateToken, checkAge(15), getAllCategories);
 router.post("/", authenticateToken, checkAge(15), createCategory);

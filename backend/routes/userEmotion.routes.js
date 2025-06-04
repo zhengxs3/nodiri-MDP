@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const authenticateToken = require("../middlewares/authenticateToken");
+
 
 const {
   getAllUserEmotions,
@@ -10,7 +12,7 @@ const {
 
 router.get("/", getAllUserEmotions);
 router.get("/:id", getUserEmotionById);
-router.post("/", createUserEmotion);
-router.delete("/:id", deleteUserEmotion);
+router.post("/", authenticateToken, createUserEmotion);
+router.delete("/:id", authenticateToken, deleteUserEmotion);
 
 module.exports = router;

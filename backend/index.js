@@ -76,6 +76,9 @@ app.use("/api/module-permissions", modulePermissionsRoutes);
 app.use("/api/challenges", challengeRoutes);
 app.use("/api/user-challenges", userChallengeRoutes);
 
+// Routes admin 
+app.use('/api/admin', require('./routes/admin.routes'));
+
 
 
 
@@ -85,6 +88,6 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Serveur lancé sur http://localhost:${PORT}`);
 });

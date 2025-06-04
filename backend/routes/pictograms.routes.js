@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { getAllPictograms, createPictogram } = require("../controllers/pictograms.controller");
-const authenticateToken = require("../middleware/authenticateToken");
-const checkRole = require("../middleware/checkRole");
+const authenticateToken = require("../middlewares/authenticateToken");
+const checkRole = require("../middlewares/checkRole");
 
 // Accessible à tous (lecture)
 router.get("/", getAllPictograms);

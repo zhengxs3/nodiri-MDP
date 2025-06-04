@@ -3,9 +3,10 @@ import {
   Poppins_600SemiBold,
   useFonts,
 } from '@expo-google-fonts/poppins';
-import AppLoading from 'expo-app-loading';
 import { Asset } from 'expo-asset';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useCallback } from 'react';
 import {
   Alert,
   Platform,
@@ -15,6 +16,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
+SplashScreen.preventAutoHideAsync();
 
 const showAlert = (title: string, message: string) => {
   if (Platform.OS === 'web') {
@@ -33,21 +36,25 @@ export default function BoiteOutilsDetail() {
     Poppins_600SemiBold,
   });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
 
   const imageMap: Record<string, any> = {
     emotion: require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Les emotions.png'),
     motmagiques: require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/Les mots magiques.png'),
     meteo: require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/La meteo.png'),
     communication: require('@/assets/images/imgAppliNodiri/3-5 ans/Boite a outils/La communication.png'),
-    
+
     regleclasse: require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Les regles de classe.png'),
     consigne: require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Les consignes.png'),
     imagemot: require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Une image un mot.png'),
     quandjesuisjepeux: require('@/assets/images/imgAppliNodiri/3-5 ans/Apprentissage/Quand je suis... je peux.png'),
-    
+
     fuseecalme: require('@/assets/images/imgAppliNodiri/6-10 ans/Boite a outils/La fusee du calme.png'),
     gomaison: require('@/assets/images/imgAppliNodiri/6-10 ans/Boite a outils/A la maison je peux.png'),
   };
@@ -64,9 +71,8 @@ export default function BoiteOutilsDetail() {
     }
   };
 
-
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={onLayoutRootView}>
       <TouchableOpacity onPress={() => router.back()} style={styles.topLeftIcon}>
         <RNImage source={require('@/assets/images/Group 183.png')} style={styles.icon} />
       </TouchableOpacity>

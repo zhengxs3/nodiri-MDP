@@ -5,8 +5,8 @@ const {
   createPost,
   deletePost
 } = require("../controllers/forumPosts.controller");
-const authenticateToken = require("../middleware/authenticateToken");
-const checkAge = require("../middleware/checkAge");
+const authenticateToken = require("../middlewares/authenticateToken");
+const checkAge = require("../middlewares/checkAge");
 
 // Toutes les routes protégées : forum réservé aux 15+
 router.get("/", authenticateToken, checkAge(15), getAllPosts);

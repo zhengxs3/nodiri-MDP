@@ -1,3 +1,5 @@
+import SimpleSelect from '@/components/SimpleSelect';
+import { API_URL } from '@/constants/api';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -25,16 +27,49 @@ export default function RegisterScreen() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('');
+  const [parentCode, setParentCode] = useState('');
 
-  const handleSubmit = () => {
-    if (!name || !password) {
+  const handleSubmit = async () => {
+    if (!name || !password || !role) {
       showAlert('Champs obligatoires', 'Veuillez remplir tous les champs obligatoires.');
       return;
     }
 
-    console.log({ name, password });
-    showAlert('Succès', 'Connexion réussie !');
-    router.replace('/login/choix');
+    const payload: any = {
+      email: name,
+      password,
+    };
+
+    if (['enfant', 'ado', 'jeune_adulte'].includes(role)) {
+      if (!parentCode) {
+        showAlert('Code parental requis', 'Veuillez entrer le code parental.');
+        return;
+      }
+      payload.parent_code = parentCode;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || data.error || 'Erreur de connexion');
+      }
+
+      showAlert('Succès', 'Connexion réussie !');
+      router.replace('/login/choix');
+    } catch (error: any) {
+      console.error(error);
+      showAlert('Erreur', error.message);
+    }
   };
 
   return (
@@ -47,18 +82,30 @@ export default function RegisterScreen() {
           <Image source={require('@/assets/images/logo.png')} style={styles.logo} />
           <Text style={styles.title}>Connexion</Text>
 
-          {/* Nom */}
+          <SimpleSelect
+            label="Vous êtes"
+            required
+            selected={role}
+            onSelect={setRole}
+            options={[
+              { label: 'Parent', value: 'parent' },
+              { label: 'Enfant', value: 'enfant' },
+              { label: 'Adolescent', value: 'ado' },
+              { label: 'Jeune adulte', value: 'jeune_adulte' },
+            ]}
+          />
+
           <View style={styles.field}>
-            <Text style={styles.label}>Nom</Text>
+            <Text style={styles.label}>Email</Text>
             <TextInput
               style={styles.input}
               value={name}
               onChangeText={setName}
               autoCapitalize="none"
+              keyboardType="email-address"
             />
           </View>
 
-          {/* Password */}
           <View style={styles.field}>
             <Text style={styles.label}>Mot de passe</Text>
             <TextInput
@@ -70,16 +117,30 @@ export default function RegisterScreen() {
             />
           </View>
 
-          <TouchableOpacity style={styles.forgotContainer} onPress={() => router.push('/login/forgotPassword')}>
+          {['enfant', 'ado', 'jeune_adulte'].includes(role) && (
+            <View style={styles.field}>
+              <Text style={styles.label}>Code parental</Text>
+              <TextInput
+                style={styles.input}
+                value={parentCode}
+                onChangeText={setParentCode}
+                autoCapitalize="characters"
+                placeholder="Ex: AB1234"
+              />
+            </View>
+          )}
+
+          <TouchableOpacity
+            style={styles.forgotContainer}
+            onPress={() => router.push('/login/forgotPassword')}
+          >
             <Text style={styles.forgot}>Mot de passe oublié ?</Text>
           </TouchableOpacity>
 
-          {/* Submit button */}
           <TouchableOpacity style={styles.button} onPress={handleSubmit}>
             <Text style={styles.buttonText}>Se connecter</Text>
           </TouchableOpacity>
 
-          {/* Retour */}
           <TouchableOpacity onPress={() => router.back()}>
             <Text style={styles.back}>Retour au menu</Text>
           </TouchableOpacity>

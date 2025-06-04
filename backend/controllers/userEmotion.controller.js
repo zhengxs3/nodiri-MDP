@@ -31,8 +31,15 @@ const getUserEmotionById = (req, res) => {
 };
 
 // POST /api/user-emotions
+// POST /api/user-emotions
 const createUserEmotion = (req, res) => {
-  const { intensity, user_id, emotion_id } = req.body;
+  const user_id = req.user.id; // On récupère l'utilisateur connecté via le token
+  const { intensity, emotion_id } = req.body; // Le front n'envoie plus user_id !
+
+  if (!emotion_id || !intensity) {
+    return res.status(400).json({ error: "emotion_id et intensity sont requis." });
+  }
+
   const sql = "INSERT INTO user_emotion (intensity, user_id, emotion_id) VALUES (?, ?, ?)";
   db.query(sql, [intensity, user_id, emotion_id], (err, result) => {
     if (err) return res.status(500).json({ error: "Erreur à la création" });

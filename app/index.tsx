@@ -1,10 +1,14 @@
 import { Poppins_400Regular, Poppins_600SemiBold, useFonts } from '@expo-google-fonts/poppins';
-import AppLoading from 'expo-app-loading';
 import { useRouter } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useCallback } from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 const BUTTON_WIDTH = 250;
+
+// Garde l'écran de splash jusqu’à ce que les polices soient chargées
+SplashScreen.preventAutoHideAsync();
 
 export default function WelcomeScreen() {
   const router = useRouter();
@@ -13,12 +17,18 @@ export default function WelcomeScreen() {
     Poppins_600SemiBold,
   });
 
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return null; // Affiche le splash par défaut
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={onLayoutRootView}>
       {/* 背景图形 */}
       <Image source={require('@/assets/images/entree01.png')} style={[styles.decor, { top: 0, left: -30, width: 120, height: 120 }]} />
       <Image source={require('@/assets/images/entree02.png')} style={[styles.decor, { top: -30, right: 0, width: 180, height: 180 }]} />
@@ -44,7 +54,7 @@ export default function WelcomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',  // 让整个背景撑满页面
+    position: 'absolute',
     top: 0,
     bottom: 0,
     left: 0,
