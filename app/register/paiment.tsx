@@ -151,7 +151,7 @@ export default function RegisterScreen() {
           </TouchableOpacity>
 
           {/* Retour */}
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.push('/register')}>
             <Text style={styles.back}>Retour à l'inscription</Text>
           </TouchableOpacity>
         </View>

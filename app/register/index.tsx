@@ -106,7 +106,7 @@ export default function RegisterScreen() {
             onSelect={setRole}
             options={[
               { label: 'Sélectionner -', value: '' },
-              { label: 'Adolescent', value: 'adolescent' },
+              { label: 'Adolescent', value: 'child' },
               { label: 'Parent', value: 'parent' },
               { label: 'Professionnel de santé', value: 'sante' },
               { label: "Professionnel de l'éducation", value: 'education' },
@@ -200,7 +200,7 @@ export default function RegisterScreen() {
             <Text style={styles.buttonText}>S’inscrire et payer</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.push('/')}>
             <Text style={styles.back}>Retour au menu</Text>
           </TouchableOpacity>
         </View>

@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   Image,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  useWindowDimensions,
 } from 'react-native';
 import PopupMenu from '../PopupMenu';
 import BottomTabBar from './BottomTabBar';
@@ -20,59 +21,72 @@ const dateFormatted = `${jours[today.getDay()]} ${today.getDate()} ${mois[today.
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { events } = useLocalSearchParams();
   const [menuVisible, setMenuVisible] = useState(false);
+  const { width } = useWindowDimensions();
+
+  const parsedEvents = events ? JSON.parse(events) : {};
 
   const handleOutsidePress = () => {
     if (menuVisible) setMenuVisible(false);
   };
 
+  const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+  const startDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+
+  const calendarCells = [];
+  for (let i = 0; i < startDay; i++) calendarCells.push(null);
+  for (let i = 1; i <= daysInMonth; i++) calendarCells.push(i);
+
+  const isToday = (day) => day === today.getDate();
+
+  const displayHours = Array.from({ length: 24 }, (_, i) => `${i}h`);
+
   return (
     <TouchableWithoutFeedback onPress={handleOutsidePress}>
       <View style={styles.wrapper}>
-        {/* 🔼 Header */}
         <View style={styles.headerRow}>
-          <Text style={styles.centeredTitle}>Routine</Text>
+          <Text style={styles.centeredTitle}>Agenda</Text>
           <TouchableOpacity style={styles.menuButton} onPress={() => setMenuVisible(!menuVisible)}>
             <Image source={require('@/assets/images/3points.png')} style={{ width: 24, height: 24 }} />
           </TouchableOpacity>
         </View>
 
         <ScrollView contentContainerStyle={styles.scroll}>
-          {/* 添加事件 */}
-          <TouchableOpacity style={styles.addEventBtn} onPress={() => router.push('/login/11-14/ajouterEvenement')}>
-            <Image source={require('@/assets/images/plus.png')} style={{ width: 18, height: 19, marginRight: 8 }} />
-            <Text style={styles.addEventText}>Ajouter un événement</Text>
-          </TouchableOpacity>
+          <View style={[styles.content, width > 600 && styles.centeredContent]}>
+            <TouchableOpacity style={styles.addEventBtn} onPress={() => router.push('/login/11-14/ajouterEvenement')}>
+              <Image source={require('@/assets/images/plus.png')} style={{ width: 18, height: 19, marginRight: 8 }} />
+              <Text style={styles.addEventText}>Ajouter un événement</Text>
+            </TouchableOpacity>
 
-          {/* 日期标题 */}
-          <Text style={styles.dateText}>{dateFormatted}</Text>
+            <Text style={styles.monthTitle}>{mois[today.getMonth()]}</Text>
 
-          {/* Routine 表格 */}
-          <View style={styles.table}>
-            {[
-              require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 1.png'),
-              require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 7.png'),
-              require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 3.png'),
-              require('@/assets/images/imgAppliNodiri/3-5 ans/Routine/Routine 5.png'),
-            ].map((source, index) => (
-              <View key={index} style={styles.tableRow}>
-                <View style={styles.leftCell}>
-                  <Image source={source} style={styles.icon} />
+            <View style={styles.calendar}>
+              {calendarCells.map((day, index) => (
+                <View
+                  key={index}
+                  style={[styles.calendarCell, isToday(day) && styles.todayCell]}
+                >
+                  <Text style={[styles.calendarText, isToday(day) && styles.todayText]}>{day ?? ''}</Text>
                 </View>
-                <View style={styles.rightCell} />
-              </View>
-            ))}
+              ))}
+            </View>
+
+            <Text style={styles.selectedDate}>{dateFormatted}</Text>
+
+            <View style={styles.verticalList}>
+              {displayHours.map((hour, i) => (
+                <View key={i} style={styles.rowItem}>
+                  <Text style={styles.hourText}>{hour}</Text>
+                  <Text style={styles.eventText}>{parsedEvents[hour] || '...'}</Text>
+                </View>
+              ))}
+            </View>
           </View>
         </ScrollView>
 
-        {/* Menu déroulant */}
-        {menuVisible && (
-          <PopupMenu onClose={() => setMenuVisible(false)} />
-        )}
-
-        {/* Bottom navigation */}
+        {menuVisible && <PopupMenu onClose={() => setMenuVisible(false)} />}
         <BottomTabBar />
-        
       </View>
     </TouchableWithoutFeedback>
   );
@@ -86,6 +100,15 @@ const styles = StyleSheet.create({
   },
   scroll: {
     paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  content: {
+    width: '100%',
+  },
+  centeredContent: {
+    maxWidth: 600,
+    width: '100%',
+    alignSelf: 'center',
   },
   headerRow: {
     position: 'relative',
@@ -114,40 +137,66 @@ const styles = StyleSheet.create({
     color: '#388AA8',
     fontSize: 16,
   },
-  dateText: {
+  monthTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#E6770F',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  calendar: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    borderWidth: 1,
+    borderColor: '#388AA8',
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  calendarCell: {
+    width: '14.28%',
+    aspectRatio: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#388AA8',
+    borderWidth: 0.5,
+    height: 60,
+  },
+  calendarText: {
+    color: '#388AA8',
+    fontWeight: '600',
+  },
+  todayCell: {
+    backgroundColor: '#388AA8',
+  },
+  todayText: {
+    color: '#fff',
+  },
+  selectedDate: {
     fontSize: 18,
     color: '#E6770F',
     fontWeight: 'bold',
-    marginTop: 16,
     marginBottom: 10,
   },
-  table: {
-    borderWidth: 1,
-    borderColor: '#000',
-    borderRadius: 12,
-    overflow: 'hidden',
+  verticalList: {
+    width: '100%',
   },
-  tableRow: {
+  rowItem: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderColor: '#000',
-    backgroundColor: '#fff',
+    borderBottomColor: '#ccc',
+    paddingVertical: 8,
+    paddingHorizontal: 4,
   },
-  leftCell: {
-    width: 70,
-    height: 70,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRightWidth: 1,
-    borderColor: '#000',
+  hourText: {
+    fontSize: 14,
+    color: '#388AA8',
+    fontWeight: 'bold',
   },
-  rightCell: {
+  eventText: {
+    fontSize: 13,
+    color: '#388AA8',
     flex: 1,
-    height: 70,
-  },
-  icon: {
-    width: 70,
-    height: 70,
-    resizeMode: 'contain',
+    textAlign: 'right',
   },
 });

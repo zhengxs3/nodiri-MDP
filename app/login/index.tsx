@@ -1,4 +1,3 @@
-import SimpleSelect from '@/components/SimpleSelect';
 import { API_URL } from '@/constants/api';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
@@ -27,11 +26,9 @@ export default function RegisterScreen() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('');
-  const [parentCode, setParentCode] = useState('');
-
+  
   const handleSubmit = async () => {
-    if (!name || !password || !role) {
+    if (!name || !password) {
       showAlert('Champs obligatoires', 'Veuillez remplir tous les champs obligatoires.');
       return;
     }
@@ -40,14 +37,6 @@ export default function RegisterScreen() {
       email: name,
       password,
     };
-
-    if (['enfant', 'ado', 'jeune_adulte'].includes(role)) {
-      if (!parentCode) {
-        showAlert('Code parental requis', 'Veuillez entrer le code parental.');
-        return;
-      }
-      payload.parent_code = parentCode;
-    }
 
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
@@ -82,18 +71,7 @@ export default function RegisterScreen() {
           <Image source={require('@/assets/images/logo.png')} style={styles.logo} />
           <Text style={styles.title}>Connexion</Text>
 
-          <SimpleSelect
-            label="Vous êtes"
-            required
-            selected={role}
-            onSelect={setRole}
-            options={[
-              { label: 'Parent', value: 'parent' },
-              { label: 'Enfant', value: 'enfant' },
-              { label: 'Adolescent', value: 'ado' },
-              { label: 'Jeune adulte', value: 'jeune_adulte' },
-            ]}
-          />
+          
 
           <View style={styles.field}>
             <Text style={styles.label}>Email</Text>
@@ -116,19 +94,6 @@ export default function RegisterScreen() {
               autoCapitalize="none"
             />
           </View>
-
-          {['enfant', 'ado', 'jeune_adulte'].includes(role) && (
-            <View style={styles.field}>
-              <Text style={styles.label}>Code parental</Text>
-              <TextInput
-                style={styles.input}
-                value={parentCode}
-                onChangeText={setParentCode}
-                autoCapitalize="characters"
-                placeholder="Ex: AB1234"
-              />
-            </View>
-          )}
 
           <TouchableOpacity
             style={styles.forgotContainer}

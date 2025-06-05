@@ -24,6 +24,7 @@
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "expo": "~53.0.9",
+    "expo-app-loading": "^2.1.1",
     "expo-blur": "~14.1.4",
     "expo-constants": "~17.1.6",
     "expo-font": "~13.3.1",

@@ -65,7 +65,7 @@ export default function ForgotPasswordScreen() {
 
           {/* Back */}
           <TouchableOpacity onPress={() => router.back()}>
-            <Text style={styles.back}>Retour à la connexion</Text>
+            <Text style={styles.back}>Retour</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

@@ -4,21 +4,19 @@ import {
   useFonts,
 } from '@expo-google-fonts/poppins';
 import Slider from '@react-native-community/slider';
+import AppLoading from 'expo-app-loading';
 import { useRouter } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useCallback, useState } from 'react';
-
+import { useState } from 'react';
 import {
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-
-SplashScreen.preventAutoHideAsync();
 
 function SettingsSection({ title, children, large = true }) {
   const [expanded, setExpanded] = useState(true);
@@ -77,16 +75,12 @@ export default function SettingsScreen() {
     Poppins_600SemiBold,
   });
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) return null;
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   return (
-    <View style={styles.wrapper} onLayout={onLayoutRootView}>
+    <View style={styles.wrapper}>
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Image source={require('@/assets/images/left.png')} style={styles.backIcon} />
@@ -166,8 +160,11 @@ export default function SettingsScreen() {
         <SettingsSection title="Sécurité / confidentialité" large>
           <SubSettingsSection title="Contrôle parental">
             <TextInput style={styles.input} placeholder="Ancien mot de passe" secureTextEntry />
-            <TouchableOpacity>
-              <Text style={styles.forgotPassword}>Mot de passe oublié ?</Text>
+            <TouchableOpacity
+              style={styles.forgotContainer}
+              onPress={() => router.push('/login/forgotPassword')}
+            >
+              <Text style={styles.forgot}>Mot de passe oublié ?</Text>
             </TouchableOpacity>
             <TextInput style={styles.input} placeholder="Nouveau mot de passe" secureTextEntry />
             <TouchableOpacity style={styles.saveSubButton}>
@@ -217,8 +214,11 @@ export default function SettingsScreen() {
 
           <SubSettingsSection title="Mot de passe">
             <TextInput style={styles.input} placeholder="Ancien mot de passe" secureTextEntry />
-            <TouchableOpacity>
-              <Text style={styles.forgotPassword}>Mot de passe oublié ?</Text>
+            <TouchableOpacity
+              style={styles.forgotContainer}
+              onPress={() => router.push('/login/forgotPassword')}
+            >
+              <Text style={styles.forgot}>Mot de passe oublié ?</Text>
             </TouchableOpacity>
             <TextInput style={styles.input} placeholder="Nouveau mot de passe" secureTextEntry />
             <TouchableOpacity style={styles.saveSubButton}>
@@ -303,38 +303,41 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  // Exemple de styles existants (remplace ou ajoute ceux que tu avais déjà)
   wrapper: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 16,
-    paddingTop: 40,
+    paddingBottom: Platform.OS === 'web' ? 0 : 45,
   },
   scroll: {
-    paddingBottom: 40,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    paddingTop: Platform.OS === 'web' ? 5 : 20,
+    height: 70,
+    paddingHorizontal: 10,
   },
   backButton: {
-    padding: 8,
+    paddingRight: 10,
   },
   backIcon: {
     width: 24,
     height: 24,
+    resizeMode: 'contain',
   },
   headerCenter: {
     flex: 1,
     alignItems: 'center',
   },
   centeredTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#388AA8',
   },
   section: {
-    marginBottom: 24,
+    marginBottom: 20,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -342,110 +345,114 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 20,
+    fontFamily: 'Poppins_600SemiBold',
   },
   arrowIcon: {
     width: 20,
     height: 20,
-    transform: [{ rotate: '0deg' }],
   },
   iconCollapsed: {
-    transform: [{ rotate: '-90deg' }],
+    transform: [{ rotate: '180deg' }],
   },
   subSection: {
-    marginTop: 12,
-    marginBottom: 12,
-    paddingLeft: 10,
+    marginBottom: 0,
   },
   subHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
   smallArrow: {
     width: 16,
     height: 16,
   },
+  label: {
+    fontSize: 16,
+    fontFamily: 'Poppins_400Regular',
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  forgotPassword: {
+    color: '#A4A4A4',
+    fontSize: 12,
+    marginBottom: 6,
+    marginLeft: 4,
+    fontFamily: 'Poppins_400Regular',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 8,
+    padding: 8,
+    marginBottom: 5,
+    fontFamily: 'Poppins_400Regular',
+  },
   toggleRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 10,
+    gap: 10,
   },
   toggleButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    paddingVertical: 2,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: '#388AA8',
+    backgroundColor: 'transparent',
   },
   toggleActive: {
     backgroundColor: '#388AA8',
   },
   toggleText: {
     fontSize: 14,
+    fontFamily: 'Poppins_400Regular',
   },
   toggleTextActive: {
     color: '#fff',
-    fontWeight: 'bold',
   },
   toggleTextInactive: {
-    color: '#000',
-  },
-  sliderContainer: {
-    marginTop: 10,
-    alignItems: 'stretch',
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-  },
-  slider: {
-    width: '100%',
-    height: 40,
-  },
-  input: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    marginVertical: 8,
-  },
-  forgotPassword: {
-    color: '#007f7f',
-    fontSize: 13,
-    marginBottom: 8,
-    textAlign: 'right',
+    color: '#388AA8',
   },
   saveSubButton: {
     backgroundColor: '#388AA8',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 6,
-    alignSelf: 'flex-end',
-    marginTop: 10,
+    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 20,
+    alignSelf: 'flex-start',
+    marginBottom: 14,
   },
   saveSubButtonText: {
-    color: '#fff',
-    fontSize: 14,
+    color: 'white',
     fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
   },
   saveButton: {
-    backgroundColor: '#007f7f',
+    backgroundColor: '#388AA8',
+    borderRadius: 30,
     paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
+    paddingHorizontal: 60,
     alignSelf: 'center',
-    marginVertical: 20,
+    marginTop: 20,
   },
   saveButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: 'white',
+    fontSize: 18,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  sliderContainer: {
+    width: '100%',
+  },
+  slider: {
+    width: '90%',
+    height: 10,
+  },
+  forgotContainer: {
+    alignSelf: 'flex-start',
+    marginBottom: 10,
+  },
+  forgot: {
+    color: '#999',
+    fontSize: 12,
+    textDecorationLine: 'underline',
   },
 });
-
